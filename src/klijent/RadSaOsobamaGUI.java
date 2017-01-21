@@ -5,12 +5,17 @@
  */
 package klijent;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import osoba.Organizator;
@@ -30,6 +35,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
      */
     private String formatiranDatum;
     private PocetnaGUI pocetnaGUI;
+    private static final int PORT = 9000;
+    private static Socket soket;
     private static ObjectOutputStream oos;
     private static ObjectInputStream ois;
     private static ArrayList<Organizator> sviOrganizatori;
@@ -38,30 +45,40 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     private static DefaultTableModel modelTabeleOsoba;
     
     public RadSaOsobamaGUI(PocetnaGUI pocetnaGUI) {
-        initComponents();
-        oos = PocetnaGUI.getOos();
-        ois = PocetnaGUI.getOis();
-        dodatnaLabel1.setText("Telefon:");
-        dodatnaLabel2.setText("Email:");
-        dodatnaLabel3.setText("Datum:");
-        dodatnaLabel4.setText("Teks:");
-        dodatnaLabel1.setVisible(true);
-        dodatnaLabel2.setVisible(true);
-        dodatnaLabel3.setVisible(true);
-        dodatnaLabel4.setVisible(true);
-        dodatniTextField1.setVisible(true);
-        dodatniTextField2.setVisible(true);
-        dodatniTextField3.setVisible(true);
-        dodatniTextField4.setVisible(true);
-        textAreaScrollPane.setVisible(true);
-        dodatniTextField3.setText(getDatum());
-        modelTabeleOsoba = (DefaultTableModel) osobeTable.getModel();
-        sviOrganizatori = KreirajDogadjajGUI.getSviOrganizatori();
-        sviPredavaci = getSviPredavaci();
-        sviUcesnici = KreirajDogadjajGUI.getSviUcesnici();
-        //popuniTabeluOsoba(sviOrganizatori, osobeTable);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.pocetnaGUI = pocetnaGUI;
+        try {
+            initComponents();
+            InetAddress adresa = InetAddress.getByName("127.0.0.1");
+            soket = new Socket(adresa, PORT);
+            oos = new ObjectOutputStream(soket.getOutputStream());
+            ois = new ObjectInputStream(soket.getInputStream());
+            
+            dodatnaLabel1.setText("Telefon:");
+            dodatnaLabel2.setText("Email:");
+            dodatnaLabel3.setText("Datum:");
+            dodatnaLabel4.setText("Teks:");
+            dodatnaLabel1.setVisible(true);
+            dodatnaLabel2.setVisible(true);
+            dodatnaLabel3.setVisible(true);
+            dodatnaLabel4.setVisible(true);
+            dodatniTextField1.setVisible(true);
+            dodatniTextField2.setVisible(true);
+            dodatniTextField3.setVisible(true);
+            dodatniTextField4.setVisible(true);
+            textAreaScrollPane.setVisible(true);
+            dodatniTextField3.setText(getDatum());
+            modelTabeleOsoba = (DefaultTableModel) osobeTable.getModel();
+            sviOrganizatori = getSviOrganizatori();
+            sviPredavaci = getSviPredavaci();
+            sviUcesnici = getSviUcesnici();
+            System.out.println("sviOrganizatori u konstruktoru:" + sviOrganizatori);
+            System.out.println("getSviPredavaci u konstruktoru:" + sviPredavaci);
+            System.out.println("getSviUcesnici u konstruktoru:" + sviUcesnici);
+            //popuniTabeluOsoba(sviOrganizatori, osobeTable);
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            this.pocetnaGUI = pocetnaGUI;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -311,7 +328,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField4.setVisible(true);
             textAreaScrollPane.setVisible(true);
             
-            popuniTabeluOsoba(sviOrganizatori, osobeTable);
+          //  popuniTabeluOsoba(sviOrganizatori, osobeTable);
             
         }
         else if(osoba.equals("Predavac")) {
@@ -325,7 +342,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField4.setVisible(false);
             textAreaScrollPane.setVisible(false);
             
-            popuniTabeluOsoba(sviPredavaci, osobeTable);
+          //  popuniTabeluOsoba(sviPredavaci, osobeTable);
         } 
         else if(osoba.equals("Ucesnik")) {
             dodatnaLabel1.setText("Organizacija:");
@@ -339,7 +356,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField4.setVisible(false);//textArea
             textAreaScrollPane.setVisible(false);//panel u kome se nalazi textArea
             sviUcesnici = KreirajDogadjajGUI.getSviUcesnici();
-            popuniTabeluOsoba(sviUcesnici, osobeTable);
+          //  popuniTabeluOsoba(sviUcesnici, osobeTable);
         }
         else{
             System.out.println("ELSE nakon svih ifova");
@@ -464,5 +481,38 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         }
        return sviPredavaci;
     }
+    
+    public static ArrayList<Ucesnik> getSviUcesnici(){
+        ArrayList<Ucesnik> sviUcesnici = new ArrayList<>();
+        try {
+            oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_UCESNICI, null));
+            Poruka poruka = (Poruka) ois.readObject();
+            sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
+            System.out.println("SVI UCESNICI PRIMLJENI SA SERVERA: " + sviUcesnici);
+            
+        } 
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+       return sviUcesnici;
+    }
+    
+    public static ArrayList<Organizator> getSviOrganizatori(){
+        ArrayList<Organizator> sviOrganizatori = new ArrayList<>();
+        try {
+            System.out.println("Prije prijema sa servera");
+            oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_ORGANIZATORI, null));
+            Poruka poruka = (Poruka) ois.readObject();
+            sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
+            System.out.println("SVI ORGANIZATORI PRIMLJENI SA SERVERA: " + sviOrganizatori);
+            
+        } 
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        System.out.println("SVI ORGANIZATORI kad se pozove iz radsaosobama" + sviOrganizatori);
+       return sviOrganizatori;
+    }
+    
     }
 

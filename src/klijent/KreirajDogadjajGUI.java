@@ -557,12 +557,12 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
     public static ArrayList<Organizator> getSviOrganizatori(){
         ArrayList<Organizator> sviOrganizatori = new ArrayList<>();
         try {
+            System.out.println("Prije prijema sa servera");
             oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_ORGANIZATORI, null));
             Poruka poruka = (Poruka) ois.readObject();
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
             System.out.println("SVI ORGANIZATORI PRIMLJENI SA SERVERA: " + sviOrganizatori);
-            oos.close();
-            ois.close();
+            
         } 
         catch (Exception ex) {
             ex.printStackTrace();
@@ -579,8 +579,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
             Poruka poruka = (Poruka) ois.readObject();
             sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
             System.out.println("SVI UCESNICI PRIMLJENI SA SERVERA: " + sviUcesnici);
-            oos.close();
-            ois.close();
+            
         } 
         catch (Exception ex) {
             ex.printStackTrace();
@@ -596,8 +595,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
             Poruka poruka = (Poruka) ois.readObject();
             sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
             System.out.println("SVI Predavaci PRIMLJENI SA SERVERA: " + sviPredavaci);
-            oos.close();
-            ois.close();
+            
         } 
         catch (Exception ex) {
             ex.printStackTrace();
