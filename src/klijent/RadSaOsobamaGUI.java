@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import osoba.NapomenaOrganizator;
 import osoba.Organizator;
 import osoba.Osoba;
 import osoba.Predavac;
@@ -43,15 +44,17 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     private static ArrayList<Predavac> sviPredavaci;
     private static ArrayList<Ucesnik> sviUcesnici;
     private static DefaultTableModel modelTabeleOsoba;
-    
+    private static ArrayList<NapomenaOrganizator> nizNapomena;
+    private static int brojNapomena = 1;
+
     public RadSaOsobamaGUI(PocetnaGUI pocetnaGUI) {
         try {
             initComponents();
             InetAddress adresa = InetAddress.getByName("127.0.0.1");
             soket = new Socket(adresa, PORT);
-            oos = new ObjectOutputStream(soket.getOutputStream());
-            ois = new ObjectInputStream(soket.getInputStream());
-            
+            oos = PocetnaGUI.getOos();
+            ois = PocetnaGUI.getOis();
+
             osobeLabel.setText("Organizatori:");
             dodatnaLabel1.setText("Telefon:");
             dodatnaLabel2.setText("Email:");
@@ -67,6 +70,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField4.setVisible(true);
             textAreaScrollPane.setVisible(true);
             dodatniTextField3.setText(getDatum());
+            dodajNapomenuDugme.setVisible(true);
+            dodajNapomenuDugme.setText("Dodaj napomenu (" + brojNapomena + ")" );
             modelTabeleOsoba = (DefaultTableModel) osobeTable.getModel();
             sviOrganizatori = getSviOrganizatori();
             sviPredavaci = getSviPredavaci();
@@ -109,7 +114,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         dodatniTextField2 = new javax.swing.JTextField();
         textAreaScrollPane = new javax.swing.JScrollPane();
         dodatniTextField4 = new javax.swing.JTextArea();
-        zavrsiUnosOsobeDugme = new javax.swing.JButton();
+        dodajNapomenuDugme = new javax.swing.JButton();
+        dodajOsobuDugme = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -164,6 +170,14 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         dodatniTextField4.setRows(5);
         textAreaScrollPane.setViewportView(dodatniTextField4);
 
+        dodajNapomenuDugme.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
+        dodajNapomenuDugme.setText("Dodaj napomenu");
+        dodajNapomenuDugme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dodajNapomenuDugmeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -185,7 +199,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                     .addComponent(dodatniTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dodatniTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dodatniTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dodajNapomenuDugme))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -218,10 +233,17 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                             .addComponent(dodatnaLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(textAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dodajNapomenuDugme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        zavrsiUnosOsobeDugme.setText("Dodaj");
+        dodajOsobuDugme.setText("Dodaj");
+        dodajOsobuDugme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dodajOsobuDugmeActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Izmjeni");
 
@@ -257,7 +279,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(zavrsiUnosOsobeDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(dodajOsobuDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -288,9 +310,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(zavrsiUnosOsobeDugme)
+                    .addComponent(dodajOsobuDugme)
                     .addComponent(jButton1)
                     .addComponent(jButton3))
                 .addGap(22, 22, 22))
@@ -319,11 +341,11 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField3.setVisible(true);
             dodatniTextField4.setVisible(true);
             textAreaScrollPane.setVisible(true);
-            
+            dodajNapomenuDugme.setVisible(true);
+
             popuniTabeluOsoba(sviOrganizatori, osobeTable);
-            
-        }
-        else if(osoba.equals("Predavac")) {
+
+        } else if (osoba.equals("Predavac")) {
             osobeLabel.setText("Predavaci:");
             dodatnaLabel1.setVisible(false);
             dodatnaLabel2.setVisible(false);
@@ -334,10 +356,10 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField3.setVisible(false);
             dodatniTextField4.setVisible(false);
             textAreaScrollPane.setVisible(false);
-            
+            dodajNapomenuDugme.setVisible(false);
+
             popuniTabeluOsoba(sviPredavaci, osobeTable);
-        } 
-        else if(osoba.equals("Ucesnik")) {
+        } else if (osoba.equals("Ucesnik")) {
             osobeLabel.setText("Ucesnik:");
             dodatnaLabel1.setText("Organizacija:");
             dodatnaLabel1.setVisible(true);
@@ -349,24 +371,90 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField3.setVisible(false);
             dodatniTextField4.setVisible(false);//textArea
             textAreaScrollPane.setVisible(false);//panel u kome se nalazi textArea
+            dodajNapomenuDugme.setVisible(false);
             popuniTabeluOsoba(sviUcesnici, osobeTable);
-        }
-        else{
+        } else {
             System.out.println("ELSE nakon svih ifova");
         }
     }//GEN-LAST:event_izborOsobeComboBoxActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+        
         pocetnaGUI.setVisible(true);
-        dispose();
+         
     }//GEN-LAST:event_formWindowClosed
+
+    private void dodajOsobuDugmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajOsobuDugmeActionPerformed
+        Osoba novaOsoba;
+        try{
+        if (izborOsobeComboBox.getSelectedItem().equals("Organizator")) {
+            String imeOrganizatora = imeUnosOsobeTextField.getText();
+            String prezimeOrganizatora = prezimeUnosOsobeTextField.getText();
+            String telefonOrganizatora = dodatniTextField1.getText();
+            String eMailOrganizatora = dodatniTextField2.getText();
+
+            novaOsoba = new Organizator(telefonOrganizatora, eMailOrganizatora, nizNapomena, imeOrganizatora, prezimeOrganizatora);
+            oos.writeObject(new Poruka(Poruka.IDPoruke.NOVI_ORGANIZATOR, novaOsoba));
+            Poruka poruka = (Poruka) ois.readObject();
+            sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
+            popuniTabeluOsoba(sviOrganizatori, osobeTable);
+            obrisiPoljaZaUnosOsobe();
+        } else if (izborOsobeComboBox.getSelectedItem().equals("Predavac")) {
+            String imePredavaca = imeUnosOsobeTextField.getText();
+            String prezimePredavaca = prezimeUnosOsobeTextField.getText();
+            novaOsoba = new Predavac(imePredavaca, prezimePredavaca);
+            oos.writeObject(new Poruka(Poruka.IDPoruke.NOVI_PREDAVAC, novaOsoba));
+            
+            Poruka poruka = (Poruka) ois.readObject();
+            sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
+            popuniTabeluOsoba(sviPredavaci, osobeTable);
+            obrisiPoljaZaUnosOsobe();
+        } else if (izborOsobeComboBox.getSelectedItem().equals("Ucesnik")) {
+            String imeUcesnika = imeUnosOsobeTextField.getText();
+            String prezimeUcesnika = prezimeUnosOsobeTextField.getText();
+            String organizacija = dodatniTextField1.getText();
+            novaOsoba = new Ucesnik(organizacija, imeUcesnika, prezimeUcesnika);
+            oos.writeObject(new Poruka(Poruka.IDPoruke.NOVI_UCESNIK, novaOsoba));
+            
+            Poruka poruka = (Poruka) ois.readObject();
+            sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
+            popuniTabeluOsoba(sviUcesnici, osobeTable);
+            obrisiPoljaZaUnosOsobe();
+        }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_dodajOsobuDugmeActionPerformed
+
+    private void dodajNapomenuDugmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajNapomenuDugmeActionPerformed
+        nizNapomena = new ArrayList<>();
+        Calendar datumNapomene = Calendar.getInstance();
+        String datum = dodatniTextField3.getText();
+        String[] datum1 = datum.split("\\.");
+        int god = Integer.parseInt(datum1[2]);
+        int mje = Integer.parseInt(datum1[0]);
+        int dan = Integer.parseInt(datum1[0]);
+        datumNapomene.set(god, mje, dan);
+        
+        String napomena = dodatniTextField4.getText();
+
+        NapomenaOrganizator napomenaOrganizator = new NapomenaOrganizator(datumNapomene, napomena);
+        nizNapomena.add(napomenaOrganizator);
+        
+        brojNapomena++;
+        dodajNapomenuDugme.setText("Dodaj napomenu(" + brojNapomena + ")" );
+        dodatniTextField4.setText("");
+    }//GEN-LAST:event_dodajNapomenuDugmeActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton dodajNapomenuDugme;
+    private javax.swing.JButton dodajOsobuDugme;
     private javax.swing.JLabel dodatnaLabel1;
     private javax.swing.JLabel dodatnaLabel2;
     private javax.swing.JLabel dodatnaLabel3;
@@ -390,7 +478,6 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     private javax.swing.JTable osobeTable;
     private javax.swing.JTextField prezimeUnosOsobeTextField;
     private javax.swing.JScrollPane textAreaScrollPane;
-    private javax.swing.JButton zavrsiUnosOsobeDugme;
     // End of variables declaration//GEN-END:variables
 
     public static String getDatum() {
@@ -401,20 +488,19 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
 // Output "Wed Sep 26 14:23:28 EST 2012"
         String formatiranDatum = formatDatum.format(datum.getTime());
         System.out.println(formatiranDatum);
-        
+
         return formatiranDatum;
 // Output "2012-09-26"
     }
 
-    private <T> void  popuniTabeluOsoba(ArrayList<T> sveOsobe, JTable osobeTable) {
+    private <T> void popuniTabeluOsoba(ArrayList<T> sveOsobe, JTable osobeTable) {
 //        DefaultTableCellRenderer centriranje = new DefaultTableCellRenderer();
 //        centriranje.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
 //        tabelaDogadjaji.getColumnModel().getColumn(1).setCellRenderer( centriranje ); //centriranje datuma i vremena
 //        tabelaDogadjaji.getColumnModel().getColumn(2).setCellRenderer( centriranje );
 //        tabelaDogadjaji.getColumnModel().getColumn(3).setCellRenderer( centriranje );
-        
-        
-     //   brisanje tabele
+
+        //   brisanje tabele
         int rowCount = modelTabeleOsoba.getRowCount();
         for (int i = rowCount - 1; i >= 0; i--) {
             modelTabeleOsoba.removeRow(i);
@@ -439,7 +525,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
 //            String formatiranKraj = formatVremena.format(vrijemeKraj.getTime());
 //            Organizator organizator = dogadjaj.getOrganizatorDogadjaja();
 //            String vrsta = dogadjaj.getVrstaDogadjaja();
-            for (T osoba : sveOsobe) {
+        for (T osoba : sveOsobe) {
 //            String nazivDogadjaja = dogadjaj.getNazivDogadjaja();
 //            Calendar datumDogadjaja = dogadjaj.getDatumPocetkaDogadjaja();
 //            Calendar vrijemePocetak = dogadjaj.getVrijemePocetkaDogadjaja();
@@ -455,12 +541,11 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
 //            String vrsta = dogadjaj.getVrstaDogadjaja();
             modelTabeleOsoba.addRow(new Object[]{osoba});
         }
-            System.out.println("POSLIJE DODAVANJA U TABELU");
-        
+        System.out.println("POSLIJE DODAVANJA U TABELU");
+
     }
-    
-    
-    public static ArrayList<Predavac> getSviPredavaci(){
+
+    public static ArrayList<Predavac> getSviPredavaci() {
         ArrayList<Predavac> sviPredavaci = new ArrayList<>();
         try {
             oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_PREDAVACI, null));
@@ -468,30 +553,28 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             System.out.println("Poruka: " + poruka);
             sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
             System.out.println("Poruka: " + poruka.getIdPoruke() + "SVI Predavaci PRIMLJENI SA SERVERA: " + sviPredavaci);
-            
-        } 
-        catch (Exception ex) {
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
-       return sviPredavaci;
+        return sviPredavaci;
     }
-    
-    public static ArrayList<Ucesnik> getSviUcesnici(){
+
+    public static ArrayList<Ucesnik> getSviUcesnici() {
         ArrayList<Ucesnik> sviUcesnici = new ArrayList<>();
         try {
             oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_UCESNICI, null));
             Poruka poruka = (Poruka) ois.readObject();
             sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
             System.out.println("SVI UCESNICI PRIMLJENI SA SERVERA: " + sviUcesnici);
-            
-        } 
-        catch (Exception ex) {
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
-       return sviUcesnici;
+        return sviUcesnici;
     }
-    
-    public static ArrayList<Organizator> getSviOrganizatori(){
+
+    public static ArrayList<Organizator> getSviOrganizatori() {
         ArrayList<Organizator> sviOrganizatori = new ArrayList<>();
         try {
             System.out.println("Prije prijema sa servera");
@@ -499,14 +582,23 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             Poruka poruka = (Poruka) ois.readObject();
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
             System.out.println("SVI ORGANIZATORI PRIMLJENI SA SERVERA: " + sviOrganizatori);
-            
-        } 
-        catch (Exception ex) {
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         System.out.println("SVI ORGANIZATORI kad se pozove iz radsaosobama" + sviOrganizatori);
-       return sviOrganizatori;
-    }
-    
+        return sviOrganizatori;
     }
 
+    private void obrisiPoljaZaUnosOsobe() {
+        
+        imeUnosOsobeTextField.setText("");
+        prezimeUnosOsobeTextField.setText("");
+        dodatniTextField1.setText("");
+        dodatniTextField2.setText("");
+        dodatniTextField3.setText("");
+        dodatniTextField4.setText("");
+        brojNapomena = 1;
+    }
+
+}

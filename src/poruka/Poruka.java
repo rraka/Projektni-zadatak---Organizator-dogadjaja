@@ -22,6 +22,7 @@ public class Poruka implements Serializable{
         NOVI_DOGADJAJ,
         NOVI_UCESNIK,
         NOVI_ORGANIZATOR,
+        NOVI_PREDAVAC,
         OK,
         GRESKA
     }

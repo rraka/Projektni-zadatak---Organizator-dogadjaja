@@ -14,8 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import osoba.Organizator;
 import osoba.Osoba;
 import osoba.Posjetilac;
+import osoba.Predavac;
+import osoba.Ucesnik;
 import poruka.Poruka;
 
 /**
@@ -30,9 +33,9 @@ class OrganizatorDogadjajaServerNit extends Thread {
     private static ListaDogadjaja ListaDogadjaja;
     private static ArrayList<Dogadjaj> sviDogadjaji;
     private static ArrayList<Posjetilac> sviPosjetioci;
-    private static ArrayList<Posjetilac> sviOrganizatori;
-    private static ArrayList<Posjetilac> sviUcesnici;
-    private static ArrayList<Posjetilac> sviPredavaci;
+    private static ArrayList<Organizator> sviOrganizatori;
+    private static ArrayList<Ucesnik> sviUcesnici;
+    private static ArrayList<Predavac> sviPredavaci;
     // private static ArrayList<Osoba> osobe;
 
     public OrganizatorDogadjajaServerNit(Socket soket) {
@@ -102,6 +105,24 @@ class OrganizatorDogadjajaServerNit extends Thread {
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.SVI_PREDAVACI))) {
                     sviPredavaci = ListaDogadjaja.deSerijalizacija("predavaci");
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviPredavaci));  //s
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.NOVI_PREDAVAC))) {
+                    sviPredavaci = ListaDogadjaja.deSerijalizacija("predavaci");
+                    Predavac noviPredavac = (Predavac) poruka.getDodatak();
+                    sviPredavaci.add(noviPredavac);
+                    ListaDogadjaja.serijalizacija(sviPredavaci);
+                    oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviPredavaci));  //s
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.NOVI_ORGANIZATOR))) {
+                    sviOrganizatori = ListaDogadjaja.deSerijalizacija("organizatori");
+                    Organizator noviOrganizator = (Organizator) poruka.getDodatak();
+                    sviOrganizatori.add(noviOrganizator);
+                    ListaDogadjaja.serijalizacija(sviOrganizatori);
+                    oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviOrganizatori));  //s
+                }else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.NOVI_UCESNIK))) {
+                    sviUcesnici = ListaDogadjaja.deSerijalizacija("ucesnici");
+                    Ucesnik noviUcesnik = (Ucesnik) poruka.getDodatak();
+                    sviUcesnici.add(noviUcesnik);
+                    ListaDogadjaja.serijalizacija(sviUcesnici);
+                    oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviUcesnici));  //s
                 }
             }
         } catch (Exception ex) {
