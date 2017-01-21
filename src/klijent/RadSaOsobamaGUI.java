@@ -52,6 +52,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             oos = new ObjectOutputStream(soket.getOutputStream());
             ois = new ObjectInputStream(soket.getInputStream());
             
+            osobeLabel.setText("Organizatori:");
             dodatnaLabel1.setText("Telefon:");
             dodatnaLabel2.setText("Email:");
             dodatnaLabel3.setText("Datum:");
@@ -73,7 +74,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             System.out.println("sviOrganizatori u konstruktoru:" + sviOrganizatori);
             System.out.println("getSviPredavaci u konstruktoru:" + sviPredavaci);
             System.out.println("getSviUcesnici u konstruktoru:" + sviUcesnici);
-            //popuniTabeluOsoba(sviOrganizatori, osobeTable);
+            popuniTabeluOsoba(sviOrganizatori, osobeTable);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             this.pocetnaGUI = pocetnaGUI;
         } catch (Exception ex) {
@@ -113,6 +114,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         osobeTable = new javax.swing.JTable();
+        osobeLabel = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -227,24 +229,10 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
 
         osobeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2"
+                ""
             }
         ));
         jScrollPane1.setViewportView(osobeTable);
@@ -274,7 +262,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(osobeLabel, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addGap(122, 122, 122))
         );
         layout.setVerticalGroup(
@@ -292,7 +281,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                         .addComponent(izborOsobeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
+                        .addGap(11, 11, 11)
+                        .addComponent(osobeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -313,6 +304,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         String osoba = (String) izborOsobeComboBox.getSelectedItem();
         System.out.println("selektrovani izbor u kombo boxu" + osoba);
         if (osoba.equals("Organizator")) {
+            osobeLabel.setText("Organizatori:");
             dodatnaLabel1.setText("Telefon:");
             dodatnaLabel2.setText("Email:");
             dodatnaLabel3.setText("Datum:");
@@ -328,10 +320,11 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField4.setVisible(true);
             textAreaScrollPane.setVisible(true);
             
-          //  popuniTabeluOsoba(sviOrganizatori, osobeTable);
+            popuniTabeluOsoba(sviOrganizatori, osobeTable);
             
         }
         else if(osoba.equals("Predavac")) {
+            osobeLabel.setText("Predavaci:");
             dodatnaLabel1.setVisible(false);
             dodatnaLabel2.setVisible(false);
             dodatnaLabel3.setVisible(false);
@@ -342,9 +335,10 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField4.setVisible(false);
             textAreaScrollPane.setVisible(false);
             
-          //  popuniTabeluOsoba(sviPredavaci, osobeTable);
+            popuniTabeluOsoba(sviPredavaci, osobeTable);
         } 
         else if(osoba.equals("Ucesnik")) {
+            osobeLabel.setText("Ucesnik:");
             dodatnaLabel1.setText("Organizacija:");
             dodatnaLabel1.setVisible(true);
             dodatnaLabel2.setVisible(false);
@@ -355,8 +349,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField3.setVisible(false);
             dodatniTextField4.setVisible(false);//textArea
             textAreaScrollPane.setVisible(false);//panel u kome se nalazi textArea
-            sviUcesnici = KreirajDogadjajGUI.getSviUcesnici();
-          //  popuniTabeluOsoba(sviUcesnici, osobeTable);
+            popuniTabeluOsoba(sviUcesnici, osobeTable);
         }
         else{
             System.out.println("ELSE nakon svih ifova");
@@ -393,6 +386,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel osobeLabel;
     private javax.swing.JTable osobeTable;
     private javax.swing.JTextField prezimeUnosOsobeTextField;
     private javax.swing.JScrollPane textAreaScrollPane;
