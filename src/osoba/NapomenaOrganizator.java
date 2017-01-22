@@ -39,7 +39,10 @@ public class NapomenaOrganizator implements Serializable{
         this.tekstualniSadrzaj = tekstualniSadrzaj;
     }
 
-   
+//   @Override
+//   public String toString(){
+//       return 
+//   }
     
     
     

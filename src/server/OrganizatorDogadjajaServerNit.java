@@ -28,8 +28,8 @@ import poruka.Poruka;
 class OrganizatorDogadjajaServerNit extends Thread {
 
     private Socket soket;
-    private static ObjectInputStream ois;
-    private static ObjectOutputStream oos;
+    private  ObjectInputStream ois;
+    private  ObjectOutputStream oos;
     private static ListaDogadjaja ListaDogadjaja;
     private static ArrayList<Dogadjaj> sviDogadjaji;
     private static ArrayList<Posjetilac> sviPosjetioci;
@@ -84,6 +84,33 @@ class OrganizatorDogadjajaServerNit extends Thread {
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviDogadjaji));  //P R O B L E M!!!!!
                     System.out.println("poslije slanja OK poruke i svih dogadjaja");
                     System.out.println("broj poslatih objekata" + sviDogadjaji.size());
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.BRISANJE_ORGANIZATORA))) {
+                    sviOrganizatori = ListaDogadjaja.deSerijalizacija("organizatori");
+                    int indeksOrganizatoraZaBrisanje = (int) poruka.getDodatak();  //p
+                    System.out.println("PRIMLJENI ORGANIZATOR ZA BRISANJE: " + indeksOrganizatoraZaBrisanje);
+                    System.out.println("prije brisanja organiyatora iz arrayliste" + sviOrganizatori.size());
+                    sviOrganizatori.remove(indeksOrganizatoraZaBrisanje);
+                    System.out.println("poslije brisanja organiyatora iz arrayliste" + sviOrganizatori.size());
+                    ListaDogadjaja.serijalizacija(sviOrganizatori);
+                    oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviOrganizatori));  
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.BRISANJE_UCESNIKA))) {
+                    sviUcesnici = ListaDogadjaja.deSerijalizacija("ucesnici");
+                    int indeksUcesnikaZaBrisanje = (int) poruka.getDodatak();  //p
+                    System.out.println("PRIMLJENI indeks UCESNIK ZA BRISANJE: " + indeksUcesnikaZaBrisanje);
+                    System.out.println("prije brisanja ucesnika iz arrayliste" + sviUcesnici.size());
+                    sviUcesnici.remove(indeksUcesnikaZaBrisanje);
+                    System.out.println("poslije brisanja dogadjaja iz arrayliste" + sviUcesnici.size());
+                    ListaDogadjaja.serijalizacija(sviUcesnici);
+                    oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviUcesnici));  
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.BRISANJE_PREDAVACA))) {
+                    sviPredavaci = ListaDogadjaja.deSerijalizacija("predavaci");
+                    int indeksPredavacaZaBrisanje = (int) poruka.getDodatak();  //p
+                    System.out.println("PRIMLJENI indeks Predavaca ZA BRISANJE: " + indeksPredavacaZaBrisanje);
+                    System.out.println("prije brisanja Predavaca iz arrayliste" + sviPredavaci.size());
+                    sviPredavaci.remove(indeksPredavacaZaBrisanje);
+                    System.out.println("poslije brisanja Predavaca iz arrayliste" + sviUcesnici.size());
+                    ListaDogadjaja.serijalizacija(sviPredavaci);
+                    oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviPredavaci));  
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.NOVI_DOGADJAJ))) {
                     sviDogadjaji = ListaDogadjaja.deSerijalizacija("dogadjaji");
                     System.out.println("Novi dogadjaj primljen za serijalizaciju: " + poruka.getDodatak());

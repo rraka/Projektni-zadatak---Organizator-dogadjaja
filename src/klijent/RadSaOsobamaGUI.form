@@ -65,10 +65,10 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="dodajOsobuDugme" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" pref="81" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="jButton3" min="-2" pref="75" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="pregledajOsobuDugme" min="-2" pref="93" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="izbrisiOsobuDugme" min="-2" pref="75" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane1" min="-2" pref="359" max="-2" attributes="0"/>
                           <Component id="osobeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -110,8 +110,8 @@
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="dodajOsobuDugme" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="pregledajOsobuDugme" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="izbrisiOsobuDugme" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
           </Group>
@@ -159,13 +159,15 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="dodatnaLabel4" min="-2" pref="78" max="-2" attributes="0"/>
-                          <Component id="jLabel3" alignment="1" min="-2" pref="78" max="-2" attributes="0"/>
-                          <Component id="jLabel4" min="-2" pref="78" max="-2" attributes="0"/>
-                          <Component id="dodatnaLabel1" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jLabel3" alignment="1" min="-2" pref="78" max="-2" attributes="0"/>
+                              <Component id="jLabel4" min="-2" pref="78" max="-2" attributes="0"/>
+                              <Component id="dodatnaLabel1" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="dodatnaLabel2" min="-2" pref="78" max="-2" attributes="0"/>
+                          <Component id="dodatnaLabel3" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="dodatnaLabel2" min="-2" pref="78" max="-2" attributes="0"/>
-                      <Component id="dodatnaLabel3" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
+                      <Component id="dodatnaLabel4" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -184,40 +186,35 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="imeUnosOsobeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="prezimeUnosOsobeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="dodatniTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dodatnaLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="dodatniTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dodatnaLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="dodatniTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dodatnaLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="141" max="-2" attributes="0"/>
-                          <Component id="dodatnaLabel4" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="imeUnosOsobeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="prezimeUnosOsobeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="dodatniTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="dodatnaLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="dodatniTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="dodatnaLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="dodatniTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="dodatnaLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="textAreaScrollPane" min="-2" pref="129" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="textAreaScrollPane" min="-2" pref="129" max="-2" attributes="0"/>
+                      <Component id="dodatnaLabel4" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="dodajNapomenuDugme" max="32767" attributes="0"/>
@@ -303,15 +300,21 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dodajOsobuDugmeActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="pregledajOsobuDugme">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Izmjeni"/>
+        <Property name="text" type="java.lang.String" value="Pregledaj"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pregledajOsobuDugmeActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="izbrisiOsobuDugme">
       <Properties>
         <Property name="text" type="java.lang.String" value="Izbrisi"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="izbrisiOsobuDugmeActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>

@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import osoba.NapomenaOrganizator;
@@ -72,6 +73,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField3.setText(getDatum());
             dodajNapomenuDugme.setVisible(true);
             dodajNapomenuDugme.setText("Dodaj napomenu (" + brojNapomena + ")" );
+            nizNapomena = new ArrayList<>();
             modelTabeleOsoba = (DefaultTableModel) osobeTable.getModel();
             sviOrganizatori = getSviOrganizatori();
             sviPredavaci = getSviPredavaci();
@@ -116,8 +118,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         dodatniTextField4 = new javax.swing.JTextArea();
         dodajNapomenuDugme = new javax.swing.JButton();
         dodajOsobuDugme = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        pregledajOsobuDugme = new javax.swing.JButton();
+        izbrisiOsobuDugme = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         osobeTable = new javax.swing.JTable();
         osobeLabel = new javax.swing.JLabel();
@@ -186,12 +188,13 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(dodatnaLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(dodatnaLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(dodatnaLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dodatnaLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dodatnaLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(dodatnaLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(dodatnaLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dodatnaLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(imeUnosOsobeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -206,33 +209,30 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(imeUnosOsobeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(prezimeUnosOsobeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dodatniTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dodatnaLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dodatniTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dodatnaLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dodatniTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dodatnaLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
-                        .addComponent(dodatnaLabel4))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(imeUnosOsobeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(prezimeUnosOsobeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dodatniTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dodatnaLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dodatniTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dodatnaLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dodatniTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dodatnaLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(textAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dodatnaLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dodajNapomenuDugme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -245,9 +245,19 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Izmjeni");
+        pregledajOsobuDugme.setText("Pregledaj");
+        pregledajOsobuDugme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pregledajOsobuDugmeActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Izbrisi");
+        izbrisiOsobuDugme.setText("Izbrisi");
+        izbrisiOsobuDugme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                izbrisiOsobuDugmeActionPerformed(evt);
+            }
+        });
 
         osobeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -281,9 +291,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(dodajOsobuDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(pregledajOsobuDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(izbrisiOsobuDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(osobeLabel, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addGap(122, 122, 122))
@@ -313,8 +323,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dodajOsobuDugme)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3))
+                    .addComponent(pregledajOsobuDugme)
+                    .addComponent(izbrisiOsobuDugme))
                 .addGap(22, 22, 22))
         );
 
@@ -326,6 +336,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         String osoba = (String) izborOsobeComboBox.getSelectedItem();
         System.out.println("selektrovani izbor u kombo boxu" + osoba);
         if (osoba.equals("Organizator")) {
+            brojNapomena = 1;
+            nizNapomena.clear();
             osobeLabel.setText("Organizatori:");
             dodatnaLabel1.setText("Telefon:");
             dodatnaLabel2.setText("Email:");
@@ -342,10 +354,13 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodatniTextField4.setVisible(true);
             textAreaScrollPane.setVisible(true);
             dodajNapomenuDugme.setVisible(true);
+            dodajNapomenuDugme.setText("Dodaj napomenu (" + brojNapomena + ")" );
 
             popuniTabeluOsoba(sviOrganizatori, osobeTable);
 
         } else if (osoba.equals("Predavac")) {
+            nizNapomena.clear();
+            brojNapomena = 1;
             osobeLabel.setText("Predavaci:");
             dodatnaLabel1.setVisible(false);
             dodatnaLabel2.setVisible(false);
@@ -360,6 +375,8 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
 
             popuniTabeluOsoba(sviPredavaci, osobeTable);
         } else if (osoba.equals("Ucesnik")) {
+            nizNapomena.clear();
+            brojNapomena = 1;
             osobeLabel.setText("Ucesnik:");
             dodatnaLabel1.setText("Organizacija:");
             dodatnaLabel1.setVisible(true);
@@ -400,6 +417,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
             popuniTabeluOsoba(sviOrganizatori, osobeTable);
             obrisiPoljaZaUnosOsobe();
+            JOptionPane.showMessageDialog(null, "Organizator - " + imeOrganizatora + " " + prezimeOrganizatora +  " uspjesno kreiran.");
         } else if (izborOsobeComboBox.getSelectedItem().equals("Predavac")) {
             String imePredavaca = imeUnosOsobeTextField.getText();
             String prezimePredavaca = prezimeUnosOsobeTextField.getText();
@@ -410,6 +428,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
             popuniTabeluOsoba(sviPredavaci, osobeTable);
             obrisiPoljaZaUnosOsobe();
+            JOptionPane.showMessageDialog(null, "Predavac - " + imePredavaca + " " + prezimePredavaca +  " uspjesno kreiran.");
         } else if (izborOsobeComboBox.getSelectedItem().equals("Ucesnik")) {
             String imeUcesnika = imeUnosOsobeTextField.getText();
             String prezimeUcesnika = prezimeUnosOsobeTextField.getText();
@@ -421,6 +440,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
             popuniTabeluOsoba(sviUcesnici, osobeTable);
             obrisiPoljaZaUnosOsobe();
+            JOptionPane.showMessageDialog(null, "Ucesnik - " + imeUcesnika + " " + prezimeUcesnika +  " uspjesno kreiran.");
         }
         }
         catch(Exception ex){
@@ -429,24 +449,88 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_dodajOsobuDugmeActionPerformed
 
     private void dodajNapomenuDugmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajNapomenuDugmeActionPerformed
-        nizNapomena = new ArrayList<>();
+        
         Calendar datumNapomene = Calendar.getInstance();
         String datum = dodatniTextField3.getText();
         String[] datum1 = datum.split("\\.");
         int god = Integer.parseInt(datum1[2]);
-        int mje = Integer.parseInt(datum1[0]);
+        int mje = Integer.parseInt(datum1[1]);
         int dan = Integer.parseInt(datum1[0]);
         datumNapomene.set(god, mje, dan);
+        System.out.println("D A T U M    N A P O M E N E::::::::" + datumNapomene);
         
         String napomena = dodatniTextField4.getText();
 
         NapomenaOrganizator napomenaOrganizator = new NapomenaOrganizator(datumNapomene, napomena);
         nizNapomena.add(napomenaOrganizator);
-        
+        System.out.println("NIZ NAPOMENA: ::::::::::::" + nizNapomena.size());
+        JOptionPane.showMessageDialog(null, brojNapomena + ". napomena uspjesno dodata. ");
         brojNapomena++;
         dodajNapomenuDugme.setText("Dodaj napomenu(" + brojNapomena + ")" );
         dodatniTextField4.setText("");
     }//GEN-LAST:event_dodajNapomenuDugmeActionPerformed
+
+    private void izbrisiOsobuDugmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_izbrisiOsobuDugmeActionPerformed
+        Osoba osobaZaBrisanje;
+        try{
+        if (izborOsobeComboBox.getSelectedItem().equals("Organizator")) {
+            int indeks = osobeTable.getSelectedRow();
+            String imeOsobe = sviOrganizatori.get(indeks).getImeOsobe() + sviOrganizatori.get(indeks).getPrezimeOsobe();
+            //osobaZaBrisanje = (Organizator) modelTabeleOsoba.getValueAt(indeks, 0);
+            System.out.println("I N D E K S  ORGANIZATOR ZA BRISANJE: " + indeks);
+            oos.writeObject(new Poruka(Poruka.IDPoruke.BRISANJE_ORGANIZATORA, indeks));
+            Poruka poruka = (Poruka) ois.readObject();
+            sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
+            popuniTabeluOsoba(sviOrganizatori, osobeTable);
+            JOptionPane.showMessageDialog(null, "Osoba: " + imeOsobe + " je uspjesno izbrisana. ");
+            //obrisiPoljaZaUnosOsobe();
+        } else if (izborOsobeComboBox.getSelectedItem().equals("Predavac")) {
+            int indeks = osobeTable.getSelectedRow();
+            String imeOsobe = sviPredavaci.get(indeks).getImeOsobe() + sviPredavaci.get(indeks).getPrezimeOsobe();
+            //osobaZaBrisanje = (Organizator) modelTabeleOsoba.getValueAt(indeks, 0);
+            System.out.println("I N D E K S  Predavac ZA BRISANJE: " + indeks);
+            oos.writeObject(new Poruka(Poruka.IDPoruke.BRISANJE_PREDAVACA, indeks));
+            Poruka poruka = (Poruka) ois.readObject();
+            sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
+            popuniTabeluOsoba(sviPredavaci, osobeTable);
+            JOptionPane.showMessageDialog(null, "Osoba: " + imeOsobe + " je uspjesno izbrisana. ");
+            //obrisiPoljaZaUnosOsobe();
+        } else if (izborOsobeComboBox.getSelectedItem().equals("Ucesnik")) {
+           int indeks = osobeTable.getSelectedRow();
+           String imeOsobe = sviUcesnici.get(indeks).getImeOsobe() + sviUcesnici.get(indeks).getPrezimeOsobe();
+            //osobaZaBrisanje = (Organizator) modelTabeleOsoba.getValueAt(indeks, 0);
+            System.out.println("I N D E K S  Ucesnik ZA BRISANJE: " + indeks);
+            oos.writeObject(new Poruka(Poruka.IDPoruke.BRISANJE_UCESNIKA, indeks));
+            Poruka poruka = (Poruka) ois.readObject();
+            sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
+            popuniTabeluOsoba(sviUcesnici, osobeTable);
+            JOptionPane.showMessageDialog(null, "Osoba: " + imeOsobe + " je uspjesno izbrisana. ");
+            //obrisiPoljaZaUnosOsobe();
+        }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_izbrisiOsobuDugmeActionPerformed
+
+    private void pregledajOsobuDugmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pregledajOsobuDugmeActionPerformed
+         if (izborOsobeComboBox.getSelectedItem().equals("Organizator")) {
+          int indeks = osobeTable.getSelectedRow();
+          Organizator organizatorZaPregled = sviOrganizatori.get(indeks);
+          this.setVisible(false);
+          new PregledOsobeGUI(this, organizatorZaPregled);
+        } else if (izborOsobeComboBox.getSelectedItem().equals("Predavac")) {
+            int indeks = osobeTable.getSelectedRow();
+          Predavac predavacZaPregled = sviPredavaci.get(indeks);
+          this.setVisible(false);
+          new PregledOsobeGUI(this, predavacZaPregled);
+        } else if (izborOsobeComboBox.getSelectedItem().equals("Ucesnik")) {
+           int indeks = osobeTable.getSelectedRow();
+          Ucesnik ucesnikZaPregled = sviUcesnici.get(indeks);
+          this.setVisible(false);
+          new PregledOsobeGUI(this, ucesnikZaPregled);
+        }
+    }//GEN-LAST:event_pregledajOsobuDugmeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -465,8 +549,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     private javax.swing.JTextArea dodatniTextField4;
     private javax.swing.JTextField imeUnosOsobeTextField;
     private javax.swing.JComboBox<String> izborOsobeComboBox;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton izbrisiOsobuDugme;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -476,6 +559,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel osobeLabel;
     private javax.swing.JTable osobeTable;
+    private javax.swing.JButton pregledajOsobuDugme;
     private javax.swing.JTextField prezimeUnosOsobeTextField;
     private javax.swing.JScrollPane textAreaScrollPane;
     // End of variables declaration//GEN-END:variables

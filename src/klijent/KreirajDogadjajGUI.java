@@ -87,7 +87,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
             sviUcesniciNaJednomDogadjaju = new ArrayList<>();//lista odabranih ucesnika na jednom dogadjaju
             modelTabelaUcesnici = (DefaultTableModel) ucesniciNaDogadjajuTable.getModel();  
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            this.pocetnaGUI = pocetnaGUI;
+           // this.pocetnaGUI = pocetnaGUI;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -136,14 +136,14 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
         zavrsiKreiranjeDogadjajaDugme = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(770, 500));
+        setPreferredSize(new java.awt.Dimension(750, 420));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
         });
 
-        gornjiPanel.setPreferredSize(new java.awt.Dimension(700, 340));
+        gornjiPanel.setPreferredSize(new java.awt.Dimension(700, 400));
 
         dogadjajiComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Izložba", "Predavanje", "Promocija", "Koncert", "Ostali događaji" }));
         dogadjajiComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -276,15 +276,15 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                                                         .addComponent(ucesnikDogadjajaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                         .addComponent(dodajUcesnikaUTabeluButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addContainerGap(62, Short.MAX_VALUE))))))))
+                                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addContainerGap(36, Short.MAX_VALUE))))))))
         );
         gornjiPanelLayout.setVerticalGroup(
             gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gornjiPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(kreiranjeDogadjajaiLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dogadjajiComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dogadjajLabel))
@@ -296,8 +296,8 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                     .addComponent(nazivDogadjajaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dodajUcesnikaUTabeluButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, gornjiPanelLayout.createSequentialGroup()
+                .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gornjiPanelLayout.createSequentialGroup()
                         .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(datumDogadjajaLabel)
                             .addComponent(datumDogadjajaDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -331,10 +331,11 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                         .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(predavacDogadjajLabel)
                             .addComponent(predavacDogadjajComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addComponent(zavrsiKreiranjeDogadjajaDugme)
-                .addGap(33, 33, 33))
+                    .addGroup(gornjiPanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addComponent(zavrsiKreiranjeDogadjajaDugme)))
+                .addGap(98, 98, 98))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -343,15 +344,15 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(gornjiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 758, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(gornjiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 702, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(gornjiPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(gornjiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -463,6 +464,12 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                 Predavanje novoPredavanje = new Predavanje(temaPredavanja, predavac, sadrzajPredavanja, nazivDogadjaja, datumDogadjaja, datumDogadjaja, vrijemeKraja, opisDogadjaja, organizatorDogadjaja, null, sviUcesniciNaJednomDogadjaju, vrstaDogadjaja);
                 oos.writeObject(new Poruka(Poruka.IDPoruke.NOVI_DOGADJAJ, novoPredavanje));
                 Poruka poruka = (Poruka) ois.readObject();
+                if(poruka.getIdPoruke().equals(Poruka.IDPoruke.OK)){
+                    JOptionPane.showMessageDialog(null, "Dogadjaj: Predavanje - " + nazivDogadjaja + " uspjesno kreiran");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "GRESKA!!! \nDogadjaj: Predavanje - " + nazivDogadjaja + " nije kreiran");
+                }
                
             }
             else if((dogadjajiComboBox.getSelectedItem()).equals("Promocija")){
@@ -472,6 +479,12 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                 Promocija novaPromocija = new Promocija(proizvod, kompanija, nazivDogadjaja, datumDogadjaja, datumDogadjaja, vrijemeKraja, opisDogadjaja, organizatorDogadjaja, null, sviUcesniciNaJednomDogadjaju, vrstaDogadjaja);
                 oos.writeObject(new Poruka(Poruka.IDPoruke.NOVI_DOGADJAJ, novaPromocija));
                 Poruka poruka = (Poruka) ois.readObject();
+                if(poruka.getIdPoruke().equals(Poruka.IDPoruke.OK)){
+                    JOptionPane.showMessageDialog(null, "Dogadjaj: Promocija - " + nazivDogadjaja + " uspjesno kreiran");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "GRESKA!!! \nDogadjaj: Promocija - " + nazivDogadjaja + " nije kreiran");
+                }
                 
             }
              else if((dogadjajiComboBox.getSelectedItem()).equals("Koncert")){
@@ -481,6 +494,12 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                 Koncert noviKoncert = new Koncert(izvodjac, trajanje, nazivDogadjaja, datumDogadjaja, datumDogadjaja, vrijemeKraja, opisDogadjaja, organizatorDogadjaja, null, sviUcesniciNaJednomDogadjaju, vrstaDogadjaja);
                 oos.writeObject(new Poruka(Poruka.IDPoruke.NOVI_DOGADJAJ, noviKoncert));
                 Poruka poruka = (Poruka) ois.readObject();
+                if(poruka.getIdPoruke().equals(Poruka.IDPoruke.OK)){
+                    JOptionPane.showMessageDialog(null, "Dogadjaj: Koncert - " + nazivDogadjaja + " uspjesno kreiran");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "GRESKA!!! \nDogadjaj: Koncert - " + nazivDogadjaja + " nije kreiran");
+                }
                 
             }
             else if((dogadjajiComboBox.getSelectedItem()).equals("Ostali događaji")){
@@ -488,6 +507,12 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                 OstaliDogadjaji noviOstaliDogadjaji = new OstaliDogadjaji(nazivDogadjaja, datumDogadjaja, datumDogadjaja, vrijemeKraja, opisDogadjaja, organizatorDogadjaja, null, sviUcesniciNaJednomDogadjaju, vrstaDogadjaja);
                 oos.writeObject(new Poruka(Poruka.IDPoruke.NOVI_DOGADJAJ, noviOstaliDogadjaji));
                 Poruka poruka = (Poruka) ois.readObject();
+                if(poruka.getIdPoruke().equals(Poruka.IDPoruke.OK)){
+                    JOptionPane.showMessageDialog(null, "Dogadjaj: Ostali Dogadjaji - " + nazivDogadjaja + " uspjesno kreiran");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "GRESKA!!! \nDogadjaj: Ostali Dogadjaji - " + nazivDogadjaja + " nije kreiran");
+                }
                 
                 
             }
@@ -552,7 +577,8 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
 //        System.out.println(pocetakVremena);
 //        System.out.println(krajVremena);
 //
-   }
+   JOptionPane.showMessageDialog(null, "Ucesnik - " + odabraniUcesnik + " uspjesno dodan na dogadjaj.");
+    }
     
     public static ArrayList<Organizator> getSviOrganizatori(){
         ArrayList<Organizator> sviOrganizatori = new ArrayList<>();

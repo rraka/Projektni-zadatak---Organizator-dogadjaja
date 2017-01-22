@@ -45,5 +45,7 @@ public abstract class Osoba implements Serializable{
     public String toString(){
         return imeOsobe + " " + prezimeOsobe;
     }
+
+    
     
 }
