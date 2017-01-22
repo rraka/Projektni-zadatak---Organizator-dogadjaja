@@ -28,11 +28,12 @@ public class Dogadjaj implements Serializable, Comparable<Dogadjaj> {
     private File fajlUzDogadjaj;
     private ArrayList<Ucesnik> ucesniciDogadjaja;
     private String vrstaDogadjaja = "";
+    private ArrayList<Dogadjaj> povezaniDogadjaji;
 
     public Dogadjaj() {
     }
 
-    public Dogadjaj(String nazivDogadjaja, Calendar datumPocetkaDogadjaja, Calendar vrijemePocetkaDogadjaja, Calendar vrijemeKrajaDogadjaja, String opisDogadjaja, Organizator organizatorDogadjaja, File fajlUzDogadjaj, ArrayList<Ucesnik> ucesniciDogadjaja, String vrstaDogadjaja) {
+    public Dogadjaj(String nazivDogadjaja, Calendar datumPocetkaDogadjaja, Calendar vrijemePocetkaDogadjaja, Calendar vrijemeKrajaDogadjaja, String opisDogadjaja, Organizator organizatorDogadjaja, File fajlUzDogadjaj, ArrayList<Ucesnik> ucesniciDogadjaja, String vrstaDogadjaja, ArrayList<Dogadjaj> povezaniDogadjaji) {
         this.nazivDogadjaja = nazivDogadjaja;
         this.datumPocetkaDogadjaja = datumPocetkaDogadjaja;
         this.vrijemePocetkaDogadjaja = vrijemePocetkaDogadjaja;
@@ -42,6 +43,7 @@ public class Dogadjaj implements Serializable, Comparable<Dogadjaj> {
         this.fajlUzDogadjaj = fajlUzDogadjaj;
         this.ucesniciDogadjaja = ucesniciDogadjaja;
         this.vrstaDogadjaja = vrstaDogadjaja;
+        this.povezaniDogadjaji = povezaniDogadjaji;
     }
 
     public String getNazivDogadjaja() {
@@ -112,6 +114,19 @@ public class Dogadjaj implements Serializable, Comparable<Dogadjaj> {
         return vrstaDogadjaja;
     }
 
+    public ArrayList<Dogadjaj> getPovezaniDogadjaji() {
+        return povezaniDogadjaji;
+    }
+
+    public void setPovezaniDogadjaji(ArrayList<Dogadjaj> povezaniDogadjaji) {
+        this.povezaniDogadjaji = povezaniDogadjaji;
+    }
+    
+    @Override
+    public String toString(){
+        return this.getNazivDogadjaja();
+    }
+    
     @Override
     public int compareTo(Dogadjaj o) {
         return this.getDatumPocetkaDogadjaja().compareTo(o.getDatumPocetkaDogadjaja());

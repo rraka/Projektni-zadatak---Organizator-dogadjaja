@@ -457,13 +457,11 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         int mje = Integer.parseInt(datum1[1]);
         int dan = Integer.parseInt(datum1[0]);
         datumNapomene.set(god, mje, dan);
-        System.out.println("D A T U M    N A P O M E N E::::::::" + datumNapomene);
         
         String napomena = dodatniTextField4.getText();
 
         NapomenaOrganizator napomenaOrganizator = new NapomenaOrganizator(datumNapomene, napomena);
         nizNapomena.add(napomenaOrganizator);
-        System.out.println("NIZ NAPOMENA: ::::::::::::" + nizNapomena.size());
         JOptionPane.showMessageDialog(null, brojNapomena + ". napomena uspjesno dodata. ");
         brojNapomena++;
         dodajNapomenuDugme.setText("Dodaj napomenu(" + brojNapomena + ")" );
@@ -476,8 +474,6 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         if (izborOsobeComboBox.getSelectedItem().equals("Organizator")) {
             int indeks = osobeTable.getSelectedRow();
             String imeOsobe = sviOrganizatori.get(indeks).getImeOsobe() + sviOrganizatori.get(indeks).getPrezimeOsobe();
-            //osobaZaBrisanje = (Organizator) modelTabeleOsoba.getValueAt(indeks, 0);
-            System.out.println("I N D E K S  ORGANIZATOR ZA BRISANJE: " + indeks);
             oos.writeObject(new Poruka(Poruka.IDPoruke.BRISANJE_ORGANIZATORA, indeks));
             Poruka poruka = (Poruka) ois.readObject();
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
@@ -487,8 +483,6 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         } else if (izborOsobeComboBox.getSelectedItem().equals("Predavac")) {
             int indeks = osobeTable.getSelectedRow();
             String imeOsobe = sviPredavaci.get(indeks).getImeOsobe() + sviPredavaci.get(indeks).getPrezimeOsobe();
-            //osobaZaBrisanje = (Organizator) modelTabeleOsoba.getValueAt(indeks, 0);
-            System.out.println("I N D E K S  Predavac ZA BRISANJE: " + indeks);
             oos.writeObject(new Poruka(Poruka.IDPoruke.BRISANJE_PREDAVACA, indeks));
             Poruka poruka = (Poruka) ois.readObject();
             sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
@@ -499,7 +493,6 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
            int indeks = osobeTable.getSelectedRow();
            String imeOsobe = sviUcesnici.get(indeks).getImeOsobe() + sviUcesnici.get(indeks).getPrezimeOsobe();
             //osobaZaBrisanje = (Organizator) modelTabeleOsoba.getValueAt(indeks, 0);
-            System.out.println("I N D E K S  Ucesnik ZA BRISANJE: " + indeks);
             oos.writeObject(new Poruka(Poruka.IDPoruke.BRISANJE_UCESNIKA, indeks));
             Poruka poruka = (Poruka) ois.readObject();
             sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
@@ -568,65 +561,22 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         Calendar datum = Calendar.getInstance();
         datum.add(Calendar.DATE, 0);
         SimpleDateFormat formatDatum = new SimpleDateFormat("dd.MM.yyyy");
-        System.out.println(datum.getTime());
 // Output "Wed Sep 26 14:23:28 EST 2012"
         String formatiranDatum = formatDatum.format(datum.getTime());
-        System.out.println(formatiranDatum);
 
         return formatiranDatum;
 // Output "2012-09-26"
     }
 
     private <T> void popuniTabeluOsoba(ArrayList<T> sveOsobe, JTable osobeTable) {
-//        DefaultTableCellRenderer centriranje = new DefaultTableCellRenderer();
-//        centriranje.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-//        tabelaDogadjaji.getColumnModel().getColumn(1).setCellRenderer( centriranje ); //centriranje datuma i vremena
-//        tabelaDogadjaji.getColumnModel().getColumn(2).setCellRenderer( centriranje );
-//        tabelaDogadjaji.getColumnModel().getColumn(3).setCellRenderer( centriranje );
-
         //   brisanje tabele
         int rowCount = modelTabeleOsoba.getRowCount();
         for (int i = rowCount - 1; i >= 0; i--) {
             modelTabeleOsoba.removeRow(i);
-
         }
-//            System.out.println("odabrani ucesnik ZA TABELU: " + ucesnikNaDogadjaju);
-//            sviUcesniciNaJednomDogadjaju.add(ucesnikNaDogadjaju);
-//            System.out.println("svi ucesnici na jednom dogadjaju:" + sviUcesniciNaJednomDogadjaju);
-//            String imeUcesnik = ucesnikNaDogadjaju.getImeOsobe();
-//            String prezimeUcesnik = ucesnikNaDogadjaju.getPrezimeOsobe();
-//            String organizacijaUcesnik = ucesnikNaDogadjaju.getOrganizacijaUcesnik();
-//            System.out.println(imeUcesnik + " " + prezimeUcesnik + " " + organizacijaUcesnik);
-//            Calendar datumDogadjaja = dogadjaj.getDatumPocetkaDogadjaja();
-//            Calendar vrijemePocetak = dogadjaj.getVrijemePocetkaDogadjaja();
-//            Calendar vrijemeKraj = dogadjaj.getVrijemeKrajaDogadjaja();
-//            
-//            SimpleDateFormat formatDatum = new SimpleDateFormat("dd.MM.yyyy");
-//            SimpleDateFormat formatVremena = new SimpleDateFormat("HH:mm");
-//            
-//            String formatiranDatum = formatDatum.format(datumDogadjaja.getTime());
-//            String formatiranPocetak = formatVremena.format(vrijemePocetak.getTime());
-//            String formatiranKraj = formatVremena.format(vrijemeKraj.getTime());
-//            Organizator organizator = dogadjaj.getOrganizatorDogadjaja();
-//            String vrsta = dogadjaj.getVrstaDogadjaja();
         for (T osoba : sveOsobe) {
-//            String nazivDogadjaja = dogadjaj.getNazivDogadjaja();
-//            Calendar datumDogadjaja = dogadjaj.getDatumPocetkaDogadjaja();
-//            Calendar vrijemePocetak = dogadjaj.getVrijemePocetkaDogadjaja();
-//            Calendar vrijemeKraj = dogadjaj.getVrijemeKrajaDogadjaja();
-//
-//            SimpleDateFormat formatDatum = new SimpleDateFormat("dd.MM.yyyy");
-//            SimpleDateFormat formatVremena = new SimpleDateFormat("HH:mm");
-//
-//            String formatiranDatum = formatDatum.format(datumDogadjaja.getTime());
-//            String formatiranPocetak = formatVremena.format(vrijemePocetak.getTime());
-//            String formatiranKraj = formatVremena.format(vrijemeKraj.getTime());
-//            Organizator organizator = dogadjaj.getOrganizatorDogadjaja();
-//            String vrsta = dogadjaj.getVrstaDogadjaja();
             modelTabeleOsoba.addRow(new Object[]{osoba});
         }
-        System.out.println("POSLIJE DODAVANJA U TABELU");
-
     }
 
     public static ArrayList<Predavac> getSviPredavaci() {
@@ -634,9 +584,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         try {
             oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_PREDAVACI, null));
             Poruka poruka = (Poruka) ois.readObject();
-            System.out.println("Poruka: " + poruka);
             sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
-            System.out.println("Poruka: " + poruka.getIdPoruke() + "SVI Predavaci PRIMLJENI SA SERVERA: " + sviPredavaci);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -650,7 +598,6 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_UCESNICI, null));
             Poruka poruka = (Poruka) ois.readObject();
             sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
-            System.out.println("SVI UCESNICI PRIMLJENI SA SERVERA: " + sviUcesnici);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -661,16 +608,13 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     public static ArrayList<Organizator> getSviOrganizatori() {
         ArrayList<Organizator> sviOrganizatori = new ArrayList<>();
         try {
-            System.out.println("Prije prijema sa servera");
             oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_ORGANIZATORI, null));
             Poruka poruka = (Poruka) ois.readObject();
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
-            System.out.println("SVI ORGANIZATORI PRIMLJENI SA SERVERA: " + sviOrganizatori);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        System.out.println("SVI ORGANIZATORI kad se pozove iz radsaosobama" + sviOrganizatori);
         return sviOrganizatori;
     }
 

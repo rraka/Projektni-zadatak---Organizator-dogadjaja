@@ -26,6 +26,9 @@ public class Poruka implements Serializable{
         NOVI_UCESNIK,
         NOVI_ORGANIZATOR,
         NOVI_PREDAVAC,
+        PREUZIMANJE_LISTE_DOGADJAJA,
+        PREUZIMANJE_LISTE_UCESNIKA,
+        PREUZIMANJE_LISTE_ORGANIZATORA,
         OK,
         GRESKA
     }

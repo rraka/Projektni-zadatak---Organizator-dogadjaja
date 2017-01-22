@@ -53,10 +53,6 @@ class OrganizatorDogadjajaServerNit extends Thread {
     public void run() {
 
         try {
-            //  String prijemPoruke = (String) ois.readObject();
-            //  System.out.println(prijemPoruke);
-            //  String izlaz1 = "poruka klijentu";
-            //  oos.writeObject(izlaz1);
             sviPosjetioci = ListaDogadjaja.deSerijalizacija("posjetioci");
             sviOrganizatori = ListaDogadjaja.deSerijalizacija("organizatori");
             sviPredavaci = ListaDogadjaja.deSerijalizacija("predavaci");
@@ -76,53 +72,34 @@ class OrganizatorDogadjajaServerNit extends Thread {
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.BRISANJE_DOGADJAJA))) {
                     sviDogadjaji = ListaDogadjaja.deSerijalizacija("dogadjaji");
                     String nazivDogadjaja = (String) poruka.getDodatak();  //p
-                    System.out.println("Naziv dogadjaja primljen za brisanje: " + nazivDogadjaja);
                     obrisiDogadjaj(nazivDogadjaja);
-                    System.out.println("poslije prisanja dogadjaja u IF");
                     ListaDogadjaja.serijalizacija(sviDogadjaji);
-                    System.out.println("poslije serijalizacije poslije brisanja dogadjaja");
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviDogadjaji));  //P R O B L E M!!!!!
-                    System.out.println("poslije slanja OK poruke i svih dogadjaja");
-                    System.out.println("broj poslatih objekata" + sviDogadjaji.size());
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.BRISANJE_ORGANIZATORA))) {
                     sviOrganizatori = ListaDogadjaja.deSerijalizacija("organizatori");
                     int indeksOrganizatoraZaBrisanje = (int) poruka.getDodatak();  //p
-                    System.out.println("PRIMLJENI ORGANIZATOR ZA BRISANJE: " + indeksOrganizatoraZaBrisanje);
-                    System.out.println("prije brisanja organiyatora iz arrayliste" + sviOrganizatori.size());
                     sviOrganizatori.remove(indeksOrganizatoraZaBrisanje);
-                    System.out.println("poslije brisanja organiyatora iz arrayliste" + sviOrganizatori.size());
                     ListaDogadjaja.serijalizacija(sviOrganizatori);
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviOrganizatori));  
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.BRISANJE_UCESNIKA))) {
                     sviUcesnici = ListaDogadjaja.deSerijalizacija("ucesnici");
                     int indeksUcesnikaZaBrisanje = (int) poruka.getDodatak();  //p
-                    System.out.println("PRIMLJENI indeks UCESNIK ZA BRISANJE: " + indeksUcesnikaZaBrisanje);
-                    System.out.println("prije brisanja ucesnika iz arrayliste" + sviUcesnici.size());
                     sviUcesnici.remove(indeksUcesnikaZaBrisanje);
-                    System.out.println("poslije brisanja dogadjaja iz arrayliste" + sviUcesnici.size());
                     ListaDogadjaja.serijalizacija(sviUcesnici);
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviUcesnici));  
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.BRISANJE_PREDAVACA))) {
                     sviPredavaci = ListaDogadjaja.deSerijalizacija("predavaci");
                     int indeksPredavacaZaBrisanje = (int) poruka.getDodatak();  //p
-                    System.out.println("PRIMLJENI indeks Predavaca ZA BRISANJE: " + indeksPredavacaZaBrisanje);
-                    System.out.println("prije brisanja Predavaca iz arrayliste" + sviPredavaci.size());
                     sviPredavaci.remove(indeksPredavacaZaBrisanje);
-                    System.out.println("poslije brisanja Predavaca iz arrayliste" + sviUcesnici.size());
                     ListaDogadjaja.serijalizacija(sviPredavaci);
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviPredavaci));  
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.NOVI_DOGADJAJ))) {
                     sviDogadjaji = ListaDogadjaja.deSerijalizacija("dogadjaji");
-                    System.out.println("Novi dogadjaj primljen za serijalizaciju: " + poruka.getDodatak());
                     Dogadjaj noviDogadjaj = new Dogadjaj();
                     noviDogadjaj = (Dogadjaj) poruka.getDodatak();
                     sviDogadjaji.add(noviDogadjaj);
-                    System.out.println("Svi dogadjaji nakon dodavanja novog:" + sviDogadjaji);
                     ListaDogadjaja.serijalizacija(sviDogadjaji);
-                    System.out.println("poslije serijalizacije poslije dodavanja novog dogadjaja");
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviDogadjaji));  //s
-                    System.out.println("poslije slanja OK poruke i svih dogadjaja");
-                    System.out.println("broj poslatih objekata" + sviDogadjaji.size());
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.SVI_ORGANIZATORI))) {
                     sviOrganizatori = ListaDogadjaja.deSerijalizacija("organizatori");
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviOrganizatori));  //s
@@ -150,6 +127,8 @@ class OrganizatorDogadjajaServerNit extends Thread {
                     sviUcesnici.add(noviUcesnik);
                     ListaDogadjaja.serijalizacija(sviUcesnici);
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviUcesnici));  //s
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.PREUZIMANJE_LISTE_DOGADJAJA))) {
+                    sviDogadjaji = ListaDogadjaja.deSerijalizacija("dogadjaji");
                 }
             }
         } catch (Exception ex) {

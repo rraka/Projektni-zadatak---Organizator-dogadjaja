@@ -35,11 +35,12 @@ public class PocetnaGUI extends javax.swing.JFrame {
     private KreirajDogadjajGUI kreirajDogadjaj;//glavniProzor
     private RadSaOsobamaGUI unosOsobe;
     private static DefaultTableModel modelTabelaDogadjaja;
-    private static ArrayList<Dogadjaj> dogadjaji;
+    private static ArrayList<Dogadjaj> sviDogadjaji;
     private static final int PORT = 9000;
     private static Socket soket;
     private static ObjectOutputStream oos;
     private static ObjectInputStream ois;
+    //private static ArrayList<Dogadjaj> sviDogadjaji;
 
     public static ObjectOutputStream getOos() {
         return oos;
@@ -49,13 +50,6 @@ public class PocetnaGUI extends javax.swing.JFrame {
         return ois;
     }
 
-    //private PregledOsobe pregledOsobe;
-    // private BrisanjeOsobe brisanjeOsobe;
-    /**
-     * Creates new form PocetnaForma
-     */
-    
-    
     public PocetnaGUI() {
         try {
             initComponents();
@@ -65,13 +59,9 @@ public class PocetnaGUI extends javax.swing.JFrame {
             soket = new Socket(adresa, PORT);
             oos = new ObjectOutputStream(soket.getOutputStream());
             ois = new ObjectInputStream(soket.getInputStream());
-
-//zahtjev za dogadjajima i primanje liste dogadjaja
-            oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_DOGADJAJI, null));
-            Poruka poruka = (Poruka) ois.readObject();
-            dogadjaji = (ArrayList<Dogadjaj>) poruka.getDodatak();
+            sviDogadjaji = getSviDogadjaji();
             modelTabelaDogadjaja = (DefaultTableModel) tabelaDogadaji.getModel();
-            popuniTabeluDogadjaja(dogadjaji, tabelaDogadaji); //popunjavanje tabele dogadjaja
+            popuniTabeluDogadjaja(sviDogadjaji, tabelaDogadaji); //popunjavanje tabele dogadjaja
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -221,7 +211,6 @@ public class PocetnaGUI extends javax.swing.JFrame {
         kreirajDogadjaj = new KreirajDogadjajGUI(this);
         kreirajDogadjaj.setVisible(true);
         this.setVisible(false);
-
         // dispose();
     }//GEN-LAST:event_KreirajDogadjajDugmeActionPerformed
 
@@ -232,30 +221,19 @@ public class PocetnaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_unosOsobeDugmeActionPerformed
 
     private void tabelaDogadajiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDogadajiMouseClicked
-
         int indeks = tabelaDogadaji.getSelectedRow();
         String nazivDogadjaja = (String) modelTabelaDogadjaja.getValueAt(indeks, 0);
-        System.out.println(nazivDogadjaja);
-
     }//GEN-LAST:event_tabelaDogadajiMouseClicked
 
     private void ObrisiDogadjajDugmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ObrisiDogadjajDugmeActionPerformed
         try {
             int indeks = tabelaDogadaji.getSelectedRow();
-            // String nazivDogadjaja = (String) modelTabelaDogadjaja.getM;
-            //System.out.println(nazivDogadjaja);
             String nazivDogadjaja = (String) tabelaDogadaji.getModel().getValueAt(indeks, 0);
-            System.out.println("Dogadjaj selektovan za brisanje " + nazivDogadjaja);
-
             oos.writeObject(new Poruka(Poruka.IDPoruke.BRISANJE_DOGADJAJA, nazivDogadjaja));//s
-System.out.println("poslije slanja dogadjaja za B R I S A NJ E " );
             Poruka poruka = (Poruka) ois.readObject(); // OVDJE Z A R I B A
-            System.out.println("poslije prijema P O RUKE" );
             if (poruka.getIdPoruke().equals(Poruka.IDPoruke.OK)) {                                //p
-                System.out.println("usao u IF!!");
-                dogadjaji = (ArrayList<Dogadjaj>) poruka.getDodatak();                         //p
-                System.out.println("lista dogadjaja: " + dogadjaji);
-                popuniTabeluDogadjaja(dogadjaji, tabelaDogadaji);
+                sviDogadjaji = (ArrayList<Dogadjaj>) poruka.getDodatak();                         //p
+                popuniTabeluDogadjaja(sviDogadjaji, tabelaDogadaji);
                 JOptionPane.showMessageDialog(null, " Dogadjaj ***" + nazivDogadjaja + "*** uspjesno izbrisan!");
             } else {
                 JOptionPane.showMessageDialog(null, " GRESKA!!! \nDogadjaj ***" + nazivDogadjaja + "*** nije izbrisan!");
@@ -269,19 +247,28 @@ System.out.println("poslije slanja dogadjaja za B R I S A NJ E " );
         PocetnaGUI pocetna = new PocetnaGUI();
 
     }
+    
+    public static ArrayList<Dogadjaj> getSviDogadjaji(){
+         ArrayList<Dogadjaj> dogadjaji = new ArrayList<>();
+        try {
+            oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_DOGADJAJI, null));
+            Poruka poruka = (Poruka) ois.readObject();
+            dogadjaji = (ArrayList<Dogadjaj>) poruka.getDodatak();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return dogadjaji;
+    }
 
     public static void popuniTabeluDogadjaja(ArrayList<Dogadjaj> dogadjaji, JTable tabelaDogadjaji) {
         DefaultTableCellRenderer centriranje = new DefaultTableCellRenderer();
         centriranje.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
         tabelaDogadjaji.getColumnModel().getColumn(1).setCellRenderer(centriranje); //centriranje datuma i vremena
         tabelaDogadjaji.getColumnModel().getColumn(2).setCellRenderer(centriranje);
-        //tabelaDogadjaji.getColumnModel().getColumn(3).setCellRenderer(centriranje);
-
         //brisanje tabele
         int rowCount = modelTabelaDogadjaja.getRowCount();
         for (int i = rowCount - 1; i >= 0; i--) {
             modelTabelaDogadjaja.removeRow(i);
-
         }
 
         for (Dogadjaj dogadjaj : dogadjaji) {
@@ -302,13 +289,6 @@ System.out.println("poslije slanja dogadjaja za B R I S A NJ E " );
                 organizator, vrsta});
         }
     }
-//    public static void obrisiTabelu(){
-//    int rowCount = modelTabelaDogadjaja.getRowCount();
-//        for (int i = rowCount - 1; i >= 0; i--) {
-//            modelTabelaDogadjaja.removeRow(i);
-//
-//        }
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton KreirajDogadjajDugme;
