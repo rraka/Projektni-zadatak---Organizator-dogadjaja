@@ -74,6 +74,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             dodajNapomenuDugme.setVisible(true);
             dodajNapomenuDugme.setText("Dodaj napomenu (" + brojNapomena + ")" );
             nizNapomena = new ArrayList<>();
+            brojNapomena = 1;
             modelTabeleOsoba = (DefaultTableModel) osobeTable.getModel();
             sviOrganizatori = getSviOrganizatori();
             sviPredavaci = getSviPredavaci();
@@ -336,6 +337,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         String osoba = (String) izborOsobeComboBox.getSelectedItem();
         System.out.println("selektrovani izbor u kombo boxu" + osoba);
         if (osoba.equals("Organizator")) {
+            for(int i=0; i<nizNapomena.size(); i++){
+            nizNapomena.remove(i);
+            }
             brojNapomena = 1;
             nizNapomena.clear();
             osobeLabel.setText("Organizatori:");
@@ -360,6 +364,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
 
         } else if (osoba.equals("Predavac")) {
             nizNapomena.clear();
+            for(int i=0; i<nizNapomena.size(); i++){
+            nizNapomena.remove(i);
+            }
             brojNapomena = 1;
             osobeLabel.setText("Predavaci:");
             dodatnaLabel1.setVisible(false);
@@ -376,6 +383,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             popuniTabeluOsoba(sviPredavaci, osobeTable);
         } else if (osoba.equals("Ucesnik")) {
             nizNapomena.clear();
+            for(int i=0; i<nizNapomena.size(); i++){
+            nizNapomena.remove(i);
+            }
             brojNapomena = 1;
             osobeLabel.setText("Ucesnik:");
             dodatnaLabel1.setText("Organizacija:");
@@ -417,6 +427,16 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
             popuniTabeluOsoba(sviOrganizatori, osobeTable);
             obrisiPoljaZaUnosOsobe();
+            System.out.println("Arej lista napomena duzina: " + nizNapomena.size());
+            for(int i=0; i<nizNapomena.size(); i++){
+            nizNapomena.remove(i);
+            }
+            System.out.println("Arej lista napomena poslije remove: " + nizNapomena);
+            nizNapomena.clear();
+            System.out.println("Arej lista napomena nakon clear(): " + nizNapomena);
+            brojNapomena = 1;
+            dodajNapomenuDugme.setText("Dodaj napomenu(" + brojNapomena + ")" );
+            
             JOptionPane.showMessageDialog(null, "Organizator - " + imeOrganizatora + " " + prezimeOrganizatora +  " uspjesno kreiran.");
         } else if (izborOsobeComboBox.getSelectedItem().equals("Predavac")) {
             String imePredavaca = imeUnosOsobeTextField.getText();
@@ -428,6 +448,11 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
             popuniTabeluOsoba(sviPredavaci, osobeTable);
             obrisiPoljaZaUnosOsobe();
+            for(int i=0; i<nizNapomena.size(); i++){
+            nizNapomena.remove(i);
+            }
+            nizNapomena.clear();
+            brojNapomena = 1;
             JOptionPane.showMessageDialog(null, "Predavac - " + imePredavaca + " " + prezimePredavaca +  " uspjesno kreiran.");
         } else if (izborOsobeComboBox.getSelectedItem().equals("Ucesnik")) {
             String imeUcesnika = imeUnosOsobeTextField.getText();
@@ -440,6 +465,11 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
             popuniTabeluOsoba(sviUcesnici, osobeTable);
             obrisiPoljaZaUnosOsobe();
+            for(int i=0; i<nizNapomena.size(); i++){
+            nizNapomena.remove(i);
+            }
+            nizNapomena.clear();
+            brojNapomena = 1;
             JOptionPane.showMessageDialog(null, "Ucesnik - " + imeUcesnika + " " + prezimeUcesnika +  " uspjesno kreiran.");
         }
         }
@@ -449,10 +479,12 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_dodajOsobuDugmeActionPerformed
 
     private void dodajNapomenuDugmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajNapomenuDugmeActionPerformed
-        
+        System.out.println("NIZ NAPOMENA PRILIKO KLIKA NA DUGME DODAJ NA POCETKU " + nizNapomena);
         Calendar datumNapomene = Calendar.getInstance();
         String datum = dodatniTextField3.getText();
         String[] datum1 = datum.split("\\.");
+        for(int i=0; i<datum1.length; i++)
+            System.out.println(datum1[i]);
         int god = Integer.parseInt(datum1[2]);
         int mje = Integer.parseInt(datum1[1]);
         int dan = Integer.parseInt(datum1[0]);
@@ -462,6 +494,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
 
         NapomenaOrganizator napomenaOrganizator = new NapomenaOrganizator(datumNapomene, napomena);
         nizNapomena.add(napomenaOrganizator);
+        System.out.println("NIZ NAPOMENA " + nizNapomena);
         JOptionPane.showMessageDialog(null, brojNapomena + ". napomena uspjesno dodata. ");
         brojNapomena++;
         dodajNapomenuDugme.setText("Dodaj napomenu(" + brojNapomena + ")" );
@@ -479,7 +512,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
             popuniTabeluOsoba(sviOrganizatori, osobeTable);
             JOptionPane.showMessageDialog(null, "Osoba: " + imeOsobe + " je uspjesno izbrisana. ");
-            //obrisiPoljaZaUnosOsobe();
+          //  obrisiPoljaZaUnosOsobe();
         } else if (izborOsobeComboBox.getSelectedItem().equals("Predavac")) {
             int indeks = osobeTable.getSelectedRow();
             String imeOsobe = sviPredavaci.get(indeks).getImeOsobe() + sviPredavaci.get(indeks).getPrezimeOsobe();
@@ -624,7 +657,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         prezimeUnosOsobeTextField.setText("");
         dodatniTextField1.setText("");
         dodatniTextField2.setText("");
-        dodatniTextField3.setText("");
+       // dodatniTextField3.setText("");
         dodatniTextField4.setText("");
         brojNapomena = 1;
     }

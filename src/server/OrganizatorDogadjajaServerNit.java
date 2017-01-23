@@ -6,9 +6,15 @@
 package server;
 
 import dogadjaj.Dogadjaj;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -129,6 +135,19 @@ class OrganizatorDogadjajaServerNit extends Thread {
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviUcesnici));  //s
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.PREUZIMANJE_LISTE_DOGADJAJA))) {
                     sviDogadjaji = ListaDogadjaja.deSerijalizacija("dogadjaji");
+                    napraviFajlSaDogadjajima();
+                    File listaDogadjaja =  new File(".\\src\\server\\fajlovi\\listaDogadjaja.csv"); 
+                    posaljiFajlKlijentu(listaDogadjaja);
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.PREUZIMANJE_LISTE_ORGANIZATORA))) {
+                    sviOrganizatori = ListaDogadjaja.deSerijalizacija("organizatori");
+                    napraviFajlSaOrganizatorima();
+                    File listaOrganizatora = new File(".\\src\\server\\fajlovi\\listaOrganizatora.csv");
+                    posaljiFajlKlijentu(listaOrganizatora);
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.PREUZIMANJE_LISTE_UCESNIKA))) {
+                    sviUcesnici = ListaDogadjaja.deSerijalizacija("ucesnici");
+                    napraviFajlSaUcesnicima();
+                    File listaUcesnika = new File(".\\src\\server\\fajlovi\\listaUcesnika.csv");
+                    posaljiFajlKlijentu(listaUcesnika);
                 }
             }
         } catch (Exception ex) {
@@ -153,5 +172,68 @@ class OrganizatorDogadjajaServerNit extends Thread {
         }
         ListaDogadjaja.serijalizacija(sviDogadjaji);
         System.out.println("Broj poslije brisanja" + sviDogadjaji.size());
+    }
+    
+    private void posaljiFajlKlijentu(File putanjaDoFajla) {
+        try {
+            long duzina = putanjaDoFajla.length();
+            System.out.println("DUZINA FAJLA: " + duzina);
+            oos.writeObject(duzina);
+            byte[] buffer = new byte[2 * 1024 * 1024];
+            InputStream fajl = new FileInputStream(putanjaDoFajla);
+            int length = 0;
+            while ((length = fajl.read(buffer)) > 0) {
+                oos.write(buffer, 0, length);
+            }
+            System.out.println("Poslan fajl:  ");
+            fajl.close();
+            oos.reset();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void napraviFajlSaOrganizatorima() {
+        try {
+            String organizatorZaUpis;
+            PrintWriter upis = new PrintWriter(new BufferedWriter(new FileWriter(".\\src\\server\\fajlovi\\listaOrganizatora.csv")), true);
+            for(int i=0; i<sviOrganizatori.size(); i++){
+                organizatorZaUpis = sviOrganizatori.get(i).toStringZaUpisUFajlOrganizatora();
+                upis.println(organizatorZaUpis);
+            }
+            upis.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    private void napraviFajlSaDogadjajima() {
+        try {
+            String dogadjajZaUpis;
+            PrintWriter upis = new PrintWriter(new BufferedWriter(new FileWriter(".\\src\\server\\fajlovi\\listaDogadjaja.csv")), true);
+            for(int i=0; i<sviDogadjaji.size(); i++){
+                dogadjajZaUpis = sviDogadjaji.get(i).toStringZaUpisUFajlDogadjaja();
+                System.out.println("DOGADJAJ ZA U P I S ::::" + dogadjajZaUpis);
+                upis.println(dogadjajZaUpis);
+            }
+            upis.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void napraviFajlSaUcesnicima() {
+       try {
+            String ucesniciZaUpis;
+            PrintWriter upis = new PrintWriter(new BufferedWriter(new FileWriter(".\\src\\server\\fajlovi\\listaUcesnika.csv")), true);
+            for(int i=0; i<sviUcesnici.size(); i++){
+                ucesniciZaUpis = sviUcesnici.get(i).toStringZaUpisUFajlUcesnika();
+                System.out.println("DOGADJAJ ZA U P I S ::::" + ucesniciZaUpis);
+                upis.println(ucesniciZaUpis);
+            }
+            upis.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } 
     }
 }

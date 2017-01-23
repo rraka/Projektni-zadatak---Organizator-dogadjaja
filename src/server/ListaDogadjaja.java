@@ -56,12 +56,12 @@ public class ListaDogadjaja implements Serializable {
     
     
     
-//    public static void main(String[] args) {
-//        ListaDogadjaja listaDogadjaja = new ListaDogadjaja();
-//        //kreirajPosjetioce();
-//        //sviPosjetioci = deSerijalizacija("posjetioci");
-//        napraviDogadjaje();//napravi pocetne dogadjaje za popunu tabele i ispitivanje funkcionalnosti
-//    }
+    public static void main(String[] args) {
+        ListaDogadjaja listaDogadjaja = new ListaDogadjaja();
+        //kreirajPosjetioce();
+        //sviPosjetioci = deSerijalizacija("posjetioci");
+        napraviDogadjaje();//napravi pocetne dogadjaje za popunu tabele i ispitivanje funkcionalnosti
+    }
     
     
     //kreiranje posjetioca iz CSV fajla
@@ -183,16 +183,16 @@ public class ListaDogadjaja implements Serializable {
 //        System.out.println(formatiranDatum + formatiranVrijemePocetka + formatiranVrijemeKraja);
 // Output "2012-09-26"
     System.out.println("Prije kreiranja prve izlozbe");
-        Izlozba izlozba1 = new Izlozba("TEMA Likovna izlozba", "Marko Markovic", "Izlozba 1", kalendar2, kalendar22,
+        Izlozba izlozba1 = new Izlozba("TEMA Likovna izlozba", "Marko Markovic", "Izlozba 14", kalendar2, kalendar22,
                 kalendar22, "opis dogadjaja 1", organizator1,
                 null, null, "Izlozba", null); //organizator, fajl, ucesnici = null
 
-        Izlozba izlozba2 = new Izlozba("TEMA Izlozba 2", "Janko Jankovic", "Izlozba 2", kalendar, kalendar,
+        Izlozba izlozba2 = new Izlozba("TEMA Izlozba 2", "Janko Jankovic", "Izlozba 22", kalendar, kalendar,
                 kalendarr, "opis dogadjaja 1", organizator1,
                 null, null, "Izlozba", null); //organizator, fajl, ucesnici = null
 
         Predavanje predavanje1 = new Predavanje("TEMA predavanja1", predavac1,
-                "Sadrzaj predavanja1", "Naziv dogadjaja - predavanje1",
+                "Sadrzaj predavanja1", "Naziv dogadjaja - predavanje12",
                 kalendar, kalendar,
                 kalendarr, "opis dogadjaja-predavanje1",
                 organizator1, null,
@@ -265,23 +265,23 @@ public class ListaDogadjaja implements Serializable {
         try {
 
             if (zaSerijalizaciju.get(0) instanceof Organizator) {
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("src\\server\\organizatori.ser")));
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(".\\src\\server\\fajlovi\\organizatori.ser")));
                 oos.writeObject(zaSerijalizaciju);
                 oos.close();
             } else if (zaSerijalizaciju.get(0) instanceof Posjetilac) {
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("src\\server\\posjetioci.ser")));
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(".\\src\\server\\fajlovi\\posjetioci.ser")));
                 oos.writeObject(zaSerijalizaciju);
                 oos.close();
             } else if (zaSerijalizaciju.get(0) instanceof Predavac) {
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("src\\server\\predavaci.ser")));
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(".\\src\\server\\fajlovi\\predavaci.ser")));
                 oos.writeObject(zaSerijalizaciju);
                 oos.close();
             } else if (zaSerijalizaciju.get(0) instanceof Ucesnik) {
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("src\\server\\ucesnici.ser")));
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(".\\src\\server\\fajlovi\\ucesnici.ser")));
                 oos.writeObject(zaSerijalizaciju);
                 oos.close();
             } else if (zaSerijalizaciju.get(0) instanceof Dogadjaj) {
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("src\\server\\listaDogadjaja.ser")));
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(".\\src\\server\\fajlovi\\listaDogadjaja.ser")));
                 oos.writeObject(zaSerijalizaciju);
                 oos.close();
             }
@@ -295,27 +295,27 @@ public class ListaDogadjaja implements Serializable {
         ArrayList<T> deSerijalizovanaLista = null;
         try {
             if (objekat.equals("dogadjaji")) {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("src\\server\\listaDogadjaja.ser")));
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(".\\src\\server\\fajlovi\\listaDogadjaja.ser")));
                 deSerijalizovanaLista = (ArrayList<T>) ois.readObject();
                 ois.close();
             }
             else if (objekat.equals("ucesnici")) {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("src\\server\\ucesnici.ser")));
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(".\\src\\server\\fajlovi\\ucesnici.ser")));
                 deSerijalizovanaLista = (ArrayList<T>) ois.readObject();
                 ois.close();
             }
             else if (objekat.equals("predavaci")) {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("src\\server\\predavaci.ser")));
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(".\\src\\server\\fajlovi\\predavaci.ser")));
                 deSerijalizovanaLista = (ArrayList<T>) ois.readObject();
                 ois.close();
             }
             if (objekat.equals("posjetioci")) {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("src\\server\\posjetioci.ser")));
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(".\\src\\server\\fajlovi\\posjetioci.ser")));
                 deSerijalizovanaLista = (ArrayList<T>) ois.readObject();
                 ois.close();
             }
             else if (objekat.equals("organizatori")) {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("src\\server\\organizatori.ser")));
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(".\\src\\server\\fajlovi\\organizatori.ser")));
                 deSerijalizovanaLista = (ArrayList<T>) ois.readObject();
                 ois.close();
             }

@@ -9,6 +9,7 @@ import osoba.Organizator;
 import osoba.Ucesnik;
 import java.io.File;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -130,6 +131,27 @@ public class Dogadjaj implements Serializable, Comparable<Dogadjaj> {
     @Override
     public int compareTo(Dogadjaj o) {
         return this.getDatumPocetkaDogadjaja().compareTo(o.getDatumPocetkaDogadjaja());
+    }
+    
+    public String toStringZaUpisUFajlDogadjaja(){
+        String dogadjaj;
+        Calendar kalendar = Calendar.getInstance();
+        Calendar kalendarVrijemeKraja = Calendar.getInstance();
+        Calendar kalendarVrijemePocetka = Calendar.getInstance();
+        SimpleDateFormat formatDatuma = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat formatVremena = new SimpleDateFormat("HH:mm");
+        
+        kalendar = this.getDatumPocetkaDogadjaja();
+        kalendarVrijemePocetka = this.getVrijemePocetkaDogadjaja();
+        kalendarVrijemeKraja = this.getVrijemeKrajaDogadjaja();
+        
+        String formatiranDatum = formatDatuma.format(kalendar.getTime());
+        String formatiranoVrijemePocetka = formatVremena.format(kalendarVrijemePocetka.getTime());
+        String formatiranoVrijemeKraja = formatVremena.format(kalendarVrijemeKraja.getTime());
+        
+        dogadjaj = this.vrstaDogadjaja + "," + this.nazivDogadjaja + "," + formatiranDatum + "," + formatiranoVrijemePocetka + "," + formatiranoVrijemeKraja + "," + this.opisDogadjaja;
+        System.out.println("Fotmatiran  dogadjaj za upis u fajl" + dogadjaj);
+        return dogadjaj;
     }
 
 }

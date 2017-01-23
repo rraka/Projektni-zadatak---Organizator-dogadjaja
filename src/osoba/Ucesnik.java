@@ -34,5 +34,10 @@ public class Ucesnik extends Osoba{
         return super.toString();
     }
     
+    public String toStringZaUpisUFajlUcesnika(){
+        String ucesnik;
+        ucesnik = this.getImeOsobe() + "," + this.getPrezimeOsobe() + "," + this.getOrganizacijaUcesnik();
+        return ucesnik;
+    }
     
 }

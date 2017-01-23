@@ -2,9 +2,12 @@ package klijent;
 
 //import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import dogadjaj.Dogadjaj;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -86,12 +89,18 @@ public class PocetnaGUI extends javax.swing.JFrame {
         ObrisiDogadjajDugme = new javax.swing.JButton();
         pokreniKampanjuButton = new javax.swing.JButton();
         unosOsobeDugme = new javax.swing.JButton();
+        preuzmiOrganizatoreButton = new javax.swing.JButton();
+        preuzmiUcesnikeButton = new javax.swing.JButton();
+        preuzmiDogadjajeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Organizator događaja");
+        setPreferredSize(new java.awt.Dimension(960, 420));
 
         tabelaDogadaji.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -159,24 +168,47 @@ public class PocetnaGUI extends javax.swing.JFrame {
             }
         });
 
+        preuzmiOrganizatoreButton.setText("Preuzmi organizatore");
+        preuzmiOrganizatoreButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                preuzmiOrganizatoreButtonActionPerformed(evt);
+            }
+        });
+
+        preuzmiUcesnikeButton.setText("Preuzmi ucesnike");
+        preuzmiUcesnikeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                preuzmiUcesnikeButtonActionPerformed(evt);
+            }
+        });
+
+        preuzmiDogadjajeButton.setText("Preuzmi dogadjaje");
+        preuzmiDogadjajeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                preuzmiDogadjajeButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(NaslovGlavnaFormaLabela, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(NaslovTabeleGlavnaFormaLabela)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(NaslovTabeleGlavnaFormaLabela)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(KreirajDogadjajDugme, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ObrisiDogadjajDugme, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pokreniKampanjuButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(unosOsobeDugme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 755, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(KreirajDogadjajDugme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ObrisiDogadjajDugme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pokreniKampanjuButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(unosOsobeDugme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(preuzmiOrganizatoreButton, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                            .addComponent(preuzmiUcesnikeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(preuzmiDogadjajeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -184,20 +216,27 @@ public class PocetnaGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(NaslovGlavnaFormaLabela, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addGap(31, 31, 31)
                 .addComponent(NaslovTabeleGlavnaFormaLabela)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(KreirajDogadjajDugme)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ObrisiDogadjajDugme)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pokreniKampanjuButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(unosOsobeDugme))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(KreirajDogadjajDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ObrisiDogadjajDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pokreniKampanjuButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(unosOsobeDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(preuzmiOrganizatoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(preuzmiUcesnikeButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(preuzmiDogadjajeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(58, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(103, 103, 103)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
         );
 
         NaslovGlavnaFormaLabela.getAccessibleContext().setAccessibleName("NaslovGlavnaFormaLabela");
@@ -242,6 +281,37 @@ public class PocetnaGUI extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_ObrisiDogadjajDugmeActionPerformed
+
+    private void preuzmiUcesnikeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preuzmiUcesnikeButtonActionPerformed
+        
+        try {
+            oos.writeObject(new Poruka(Poruka.IDPoruke.PREUZIMANJE_LISTE_UCESNIKA, null));
+            File ucesniciFajl = new File("src/klijent/fajlovi/listaUcesnikaaaaaaaaa.csv");
+            primiFajl(ucesniciFajl);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_preuzmiUcesnikeButtonActionPerformed
+
+    private void preuzmiOrganizatoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preuzmiOrganizatoreButtonActionPerformed
+        try {
+            oos.writeObject(new Poruka(Poruka.IDPoruke.PREUZIMANJE_LISTE_ORGANIZATORA, null));
+            File organizatoriFajl = new File("src/klijent/fajlovi/listaOrganizatoraaaaaaaaaa.csv");
+            primiFajl(organizatoriFajl);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_preuzmiOrganizatoreButtonActionPerformed
+
+    private void preuzmiDogadjajeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preuzmiDogadjajeButtonActionPerformed
+       try {
+            oos.writeObject(new Poruka(Poruka.IDPoruke.PREUZIMANJE_LISTE_DOGADJAJA, null));
+            File dogadjajiFajl = new File("src/klijent/fajlovi/listaDogadjajaaaaaaaaaaaaa.csv");
+            primiFajl(dogadjajiFajl);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_preuzmiDogadjajeButtonActionPerformed
 
     public static void main(String args[]) {
         PocetnaGUI pocetna = new PocetnaGUI();
@@ -289,6 +359,28 @@ public class PocetnaGUI extends javax.swing.JFrame {
                 organizator, vrsta});
         }
     }
+    
+    public static void primiFajl(File putanjaFajla) {
+        try {
+            long duzinaLong = (long) ois.readObject();
+            int duzina = (int) duzinaLong;
+            int kontrolnaDuzina = 0, flag = 0;
+            byte[] buffer = new byte[2 * 1024 * 1024];
+            OutputStream fajl = new FileOutputStream(putanjaFajla);
+            while ((kontrolnaDuzina = ois.read(buffer)) > 0) {
+                fajl.write(buffer, 0, kontrolnaDuzina);
+                flag += kontrolnaDuzina;
+                if (duzina <= flag) {
+                    break;
+                }
+            }
+            System.out.println("Preuzimanje zavrseno...");
+            fajl.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton KreirajDogadjajDugme;
@@ -297,6 +389,9 @@ public class PocetnaGUI extends javax.swing.JFrame {
     private javax.swing.JButton ObrisiDogadjajDugme;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton pokreniKampanjuButton;
+    private javax.swing.JButton preuzmiDogadjajeButton;
+    private javax.swing.JButton preuzmiOrganizatoreButton;
+    private javax.swing.JButton preuzmiUcesnikeButton;
     private javax.swing.JTable tabelaDogadaji;
     private javax.swing.JButton unosOsobeDugme;
     // End of variables declaration//GEN-END:variables

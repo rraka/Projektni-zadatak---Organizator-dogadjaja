@@ -56,5 +56,10 @@ public class Organizator extends Osoba{
         return super.toString();
     }
     
+    public String toStringZaUpisUFajlOrganizatora(){
+        String organizator;
+        organizator = this.getImeOsobe() + "," + this.getPrezimeOsobe() + "," + this.getTelefonOrganizator() + "," + this.geteMailOrganizator();
+        return organizator;
+    }
     
 }
