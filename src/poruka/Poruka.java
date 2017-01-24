@@ -30,7 +30,12 @@ public class Poruka implements Serializable{
         PREUZIMANJE_LISTE_UCESNIKA,
         PREUZIMANJE_LISTE_ORGANIZATORA,
         OK,
-        GRESKA
+        GRESKA,
+        POKRENI_MARKENTISKU_KAMPANJU,
+        MARKENTISKA_KAMPANJA,
+        ZATVARANJE_KONEKCIJE,
+        OBAVJESTENJE,
+        ZATVORI_OBAVJESTENJE
     }
     
     private IDPoruke idPoruke;
@@ -39,6 +44,9 @@ public class Poruka implements Serializable{
     public Poruka(IDPoruke idPoruke, Object dodatak) {
         this.idPoruke = idPoruke;
         this.dodatak = dodatak;
+    }
+    public Poruka(IDPoruke idPoruke) {
+        this.idPoruke = idPoruke;
     }
 
     public IDPoruke getIdPoruke() {

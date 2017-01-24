@@ -2,6 +2,8 @@ package klijent;
 
 //import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import dogadjaj.Dogadjaj;
+import dogadjaj.Koncert;
+import dogadjaj.Promocija;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,19 +39,19 @@ public class PocetnaGUI extends javax.swing.JFrame {
 
     private KreirajDogadjajGUI kreirajDogadjaj;//glavniProzor
     private RadSaOsobamaGUI unosOsobe;
-    private static DefaultTableModel modelTabelaDogadjaja;
-    private static ArrayList<Dogadjaj> sviDogadjaji;
-    private static final int PORT = 9000;
-    private static Socket soket;
-    private static ObjectOutputStream oos;
-    private static ObjectInputStream ois;
+    private DefaultTableModel modelTabelaDogadjaja;
+    private ArrayList<Dogadjaj> sviDogadjaji;
+    private final int PORT = 9000;
+    private Socket soket;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
     //private static ArrayList<Dogadjaj> sviDogadjaji;
 
-    public static ObjectOutputStream getOos() {
+    public ObjectOutputStream getOos() {
         return oos;
     }
 
-    public static ObjectInputStream getOis() {
+    public ObjectInputStream getOis() {
         return ois;
     }
 
@@ -62,7 +64,10 @@ public class PocetnaGUI extends javax.swing.JFrame {
             soket = new Socket(adresa, PORT);
             oos = new ObjectOutputStream(soket.getOutputStream());
             ois = new ObjectInputStream(soket.getInputStream());
-            sviDogadjaji = getSviDogadjaji();
+            
+            new ObavjestenjeKlijentNit();
+            
+            popuniSveDogadjaje();
             modelTabelaDogadjaja = (DefaultTableModel) tabelaDogadaji.getModel();
             popuniTabeluDogadjaja(sviDogadjaji, tabelaDogadaji); //popunjavanje tabele dogadjaja
 
@@ -96,6 +101,11 @@ public class PocetnaGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Organizator događaja");
         setPreferredSize(new java.awt.Dimension(960, 420));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         tabelaDogadaji.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -120,7 +130,7 @@ public class PocetnaGUI extends javax.swing.JFrame {
                 "Naziv", "Datum", "Pocetak", "Kraj", "Organizator", "Vrsta"
             }
         ));
-        tabelaDogadaji.setColumnSelectionAllowed(true);
+        tabelaDogadaji.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDogadaji.getTableHeader().setReorderingAllowed(false);
         tabelaDogadaji.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -160,6 +170,11 @@ public class PocetnaGUI extends javax.swing.JFrame {
         });
 
         pokreniKampanjuButton.setText("Pokreni  kampanju");
+        pokreniKampanjuButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pokreniKampanjuButtonMouseClicked(evt);
+            }
+        });
 
         unosOsobeDugme.setText("Rad sa osobama");
         unosOsobeDugme.addActionListener(new java.awt.event.ActionListener() {
@@ -283,7 +298,7 @@ public class PocetnaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_ObrisiDogadjajDugmeActionPerformed
 
     private void preuzmiUcesnikeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preuzmiUcesnikeButtonActionPerformed
-        
+
         try {
             oos.writeObject(new Poruka(Poruka.IDPoruke.PREUZIMANJE_LISTE_UCESNIKA, null));
             File ucesniciFajl = new File("src/klijent/fajlovi/listaUcesnikaaaaaaaaa.csv");
@@ -304,7 +319,7 @@ public class PocetnaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_preuzmiOrganizatoreButtonActionPerformed
 
     private void preuzmiDogadjajeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preuzmiDogadjajeButtonActionPerformed
-       try {
+        try {
             oos.writeObject(new Poruka(Poruka.IDPoruke.PREUZIMANJE_LISTE_DOGADJAJA, null));
             File dogadjajiFajl = new File("src/klijent/fajlovi/listaDogadjajaaaaaaaaaaaaa.csv");
             primiFajl(dogadjajiFajl);
@@ -313,24 +328,43 @@ public class PocetnaGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_preuzmiDogadjajeButtonActionPerformed
 
+    private void pokreniKampanjuButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pokreniKampanjuButtonMouseClicked
+        int selektovaniIndeks = tabelaDogadaji.getSelectedRow();
+        if (selektovaniIndeks >= 0) {
+            try {
+                Dogadjaj dogadjaj = sviDogadjaji.get(selektovaniIndeks);
+                if (dogadjaj instanceof Koncert || dogadjaj instanceof Promocija) {
+                    oos.writeObject(new Poruka(Poruka.IDPoruke.POKRENI_MARKENTISKU_KAMPANJU, dogadjaj));
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(PocetnaGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_pokreniKampanjuButtonMouseClicked
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            oos.writeObject(new Poruka(Poruka.IDPoruke.ZATVARANJE_KONEKCIJE));
+        } catch (IOException ex) {
+            Logger.getLogger(PocetnaGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
     public static void main(String args[]) {
         PocetnaGUI pocetna = new PocetnaGUI();
-
     }
-    
-    public static ArrayList<Dogadjaj> getSviDogadjaji(){
-         ArrayList<Dogadjaj> dogadjaji = new ArrayList<>();
+
+    private void popuniSveDogadjaje() {
         try {
             oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_DOGADJAJI, null));
             Poruka poruka = (Poruka) ois.readObject();
-            dogadjaji = (ArrayList<Dogadjaj>) poruka.getDodatak();
+            sviDogadjaji = (ArrayList<Dogadjaj>) poruka.getDodatak();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return dogadjaji;
     }
 
-    public static void popuniTabeluDogadjaja(ArrayList<Dogadjaj> dogadjaji, JTable tabelaDogadjaji) {
+    public void popuniTabeluDogadjaja(ArrayList<Dogadjaj> dogadjaji, JTable tabelaDogadjaji) {
         DefaultTableCellRenderer centriranje = new DefaultTableCellRenderer();
         centriranje.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
         tabelaDogadjaji.getColumnModel().getColumn(1).setCellRenderer(centriranje); //centriranje datuma i vremena
@@ -359,8 +393,8 @@ public class PocetnaGUI extends javax.swing.JFrame {
                 organizator, vrsta});
         }
     }
-    
-    public static void primiFajl(File putanjaFajla) {
+
+    public void primiFajl(File putanjaFajla) {
         try {
             long duzinaLong = (long) ois.readObject();
             int duzina = (int) duzinaLong;

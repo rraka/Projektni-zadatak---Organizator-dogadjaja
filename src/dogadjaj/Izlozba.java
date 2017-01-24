@@ -10,7 +10,6 @@ import osoba.Ucesnik;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  *
@@ -47,9 +46,4 @@ public class Izlozba extends Dogadjaj {
         this.autorIzlozbe = autorIzlozbe;
     }
 
-    
-    
-    
-    
-    
 }

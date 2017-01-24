@@ -35,26 +35,21 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     /**
      * Creates new form RadSaOsobamaGUI
      */
-    private String formatiranDatum;
     private PocetnaGUI pocetnaGUI;
-    private static final int PORT = 9000;
-    private static Socket soket;
-    private static ObjectOutputStream oos;
-    private static ObjectInputStream ois;
-    private static ArrayList<Organizator> sviOrganizatori;
-    private static ArrayList<Predavac> sviPredavaci;
-    private static ArrayList<Ucesnik> sviUcesnici;
-    private static DefaultTableModel modelTabeleOsoba;
-    private static ArrayList<NapomenaOrganizator> nizNapomena;
-    private static int brojNapomena = 1;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
+    private ArrayList<Organizator> sviOrganizatori;
+    private ArrayList<Predavac> sviPredavaci;
+    private ArrayList<Ucesnik> sviUcesnici;
+    private DefaultTableModel modelTabeleOsoba;
+    private ArrayList<NapomenaOrganizator> nizNapomena;
+    private int brojNapomena = 1;
 
     public RadSaOsobamaGUI(PocetnaGUI pocetnaGUI) {
         try {
             initComponents();
-            InetAddress adresa = InetAddress.getByName("127.0.0.1");
-            soket = new Socket(adresa, PORT);
-            oos = PocetnaGUI.getOos();
-            ois = PocetnaGUI.getOis();
+            oos = pocetnaGUI.getOos();
+            ois = pocetnaGUI.getOis();
 
             osobeLabel.setText("Organizatori:");
             dodatnaLabel1.setText("Telefon:");
@@ -79,9 +74,6 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviOrganizatori = getSviOrganizatori();
             sviPredavaci = getSviPredavaci();
             sviUcesnici = getSviUcesnici();
-            System.out.println("sviOrganizatori u konstruktoru:" + sviOrganizatori);
-            System.out.println("getSviPredavaci u konstruktoru:" + sviPredavaci);
-            System.out.println("getSviUcesnici u konstruktoru:" + sviUcesnici);
             popuniTabeluOsoba(sviOrganizatori, osobeTable);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             this.pocetnaGUI = pocetnaGUI;
@@ -364,9 +356,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
 
         } else if (osoba.equals("Predavac")) {
             nizNapomena.clear();
-            for(int i=0; i<nizNapomena.size(); i++){
-            nizNapomena.remove(i);
-            }
+//            for(int i=0; i<nizNapomena.size(); i++){
+//            nizNapomena.remove(i);
+//            }
             brojNapomena = 1;
             osobeLabel.setText("Predavaci:");
             dodatnaLabel1.setVisible(false);
@@ -383,9 +375,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             popuniTabeluOsoba(sviPredavaci, osobeTable);
         } else if (osoba.equals("Ucesnik")) {
             nizNapomena.clear();
-            for(int i=0; i<nizNapomena.size(); i++){
-            nizNapomena.remove(i);
-            }
+//            for(int i=0; i<nizNapomena.size(); i++){
+//            nizNapomena.remove(i);
+//            }
             brojNapomena = 1;
             osobeLabel.setText("Ucesnik:");
             dodatnaLabel1.setText("Organizacija:");
@@ -427,14 +419,12 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
             popuniTabeluOsoba(sviOrganizatori, osobeTable);
             obrisiPoljaZaUnosOsobe();
-            System.out.println("Arej lista napomena duzina: " + nizNapomena.size());
-            for(int i=0; i<nizNapomena.size(); i++){
-            nizNapomena.remove(i);
-            }
-            System.out.println("Arej lista napomena poslije remove: " + nizNapomena);
+//            for(int i=0; i<nizNapomena.size(); i++){
+//            nizNapomena.remove(i);
+//            }
             nizNapomena.clear();
-            System.out.println("Arej lista napomena nakon clear(): " + nizNapomena);
             brojNapomena = 1;
+            nizNapomena = new ArrayList<>();
             dodajNapomenuDugme.setText("Dodaj napomenu(" + brojNapomena + ")" );
             
             JOptionPane.showMessageDialog(null, "Organizator - " + imeOrganizatora + " " + prezimeOrganizatora +  " uspjesno kreiran.");
@@ -448,9 +438,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
             popuniTabeluOsoba(sviPredavaci, osobeTable);
             obrisiPoljaZaUnosOsobe();
-            for(int i=0; i<nizNapomena.size(); i++){
-            nizNapomena.remove(i);
-            }
+//            for(int i=0; i<nizNapomena.size(); i++){
+//            nizNapomena.remove(i);
+//            }
             nizNapomena.clear();
             brojNapomena = 1;
             JOptionPane.showMessageDialog(null, "Predavac - " + imePredavaca + " " + prezimePredavaca +  " uspjesno kreiran.");
@@ -465,9 +455,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
             sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
             popuniTabeluOsoba(sviUcesnici, osobeTable);
             obrisiPoljaZaUnosOsobe();
-            for(int i=0; i<nizNapomena.size(); i++){
-            nizNapomena.remove(i);
-            }
+//            for(int i=0; i<nizNapomena.size(); i++){
+//            nizNapomena.remove(i);
+//            }
             nizNapomena.clear();
             brojNapomena = 1;
             JOptionPane.showMessageDialog(null, "Ucesnik - " + imeUcesnika + " " + prezimeUcesnika +  " uspjesno kreiran.");
@@ -479,6 +469,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_dodajOsobuDugmeActionPerformed
 
     private void dodajNapomenuDugmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajNapomenuDugmeActionPerformed
+        
         System.out.println("NIZ NAPOMENA PRILIKO KLIKA NA DUGME DODAJ NA POCETKU " + nizNapomena);
         Calendar datumNapomene = Calendar.getInstance();
         String datum = dodatniTextField3.getText();
@@ -489,12 +480,9 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         int mje = Integer.parseInt(datum1[1]);
         int dan = Integer.parseInt(datum1[0]);
         datumNapomene.set(god, mje, dan);
-        
         String napomena = dodatniTextField4.getText();
-
         NapomenaOrganizator napomenaOrganizator = new NapomenaOrganizator(datumNapomene, napomena);
         nizNapomena.add(napomenaOrganizator);
-        System.out.println("NIZ NAPOMENA " + nizNapomena);
         JOptionPane.showMessageDialog(null, brojNapomena + ". napomena uspjesno dodata. ");
         brojNapomena++;
         dodajNapomenuDugme.setText("Dodaj napomenu(" + brojNapomena + ")" );
@@ -612,7 +600,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         }
     }
 
-    public static ArrayList<Predavac> getSviPredavaci() {
+    public ArrayList<Predavac> getSviPredavaci() {
         ArrayList<Predavac> sviPredavaci = new ArrayList<>();
         try {
             oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_PREDAVACI, null));
@@ -625,7 +613,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         return sviPredavaci;
     }
 
-    public static ArrayList<Ucesnik> getSviUcesnici() {
+    public ArrayList<Ucesnik> getSviUcesnici() {
         ArrayList<Ucesnik> sviUcesnici = new ArrayList<>();
         try {
             oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_UCESNICI, null));
@@ -638,7 +626,7 @@ public class RadSaOsobamaGUI extends javax.swing.JFrame {
         return sviUcesnici;
     }
 
-    public static ArrayList<Organizator> getSviOrganizatori() {
+    public ArrayList<Organizator> getSviOrganizatori() {
         ArrayList<Organizator> sviOrganizatori = new ArrayList<>();
         try {
             oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_ORGANIZATORI, null));

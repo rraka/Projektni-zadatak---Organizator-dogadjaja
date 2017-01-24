@@ -19,10 +19,8 @@ import java.io.FileReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import osoba.NapomenaOrganizator;
 import osoba.Organizator;
 import osoba.Posjetilac;
@@ -35,8 +33,8 @@ import osoba.Ucesnik;
  */
 public class ListaDogadjaja implements Serializable {
 
-    private static ArrayList<Dogadjaj> dogadjaji;
-    private  static ArrayList<Posjetilac> sviPosjetioci;
+    private ArrayList<Dogadjaj> dogadjaji;
+    private ArrayList<Posjetilac> sviPosjetioci;
     
 
     public ListaDogadjaja() {
@@ -56,13 +54,13 @@ public class ListaDogadjaja implements Serializable {
     
     
     
-    public static void main(String[] args) {
-        ListaDogadjaja listaDogadjaja = new ListaDogadjaja();
-        //kreirajPosjetioce();
-        //sviPosjetioci = deSerijalizacija("posjetioci");
-        napraviDogadjaje();//napravi pocetne dogadjaje za popunu tabele i ispitivanje funkcionalnosti
-    }
-    
+//    public static void main(String[] args) {
+//        ListaDogadjaja listaDogadjaja = new ListaDogadjaja();
+//        //kreirajPosjetioce();
+//        //sviPosjetioci = deSerijalizacija("posjetioci");
+//        napraviDogadjaje();//napravi pocetne dogadjaje za popunu tabele i ispitivanje funkcionalnosti
+//    }
+//    
     
     //kreiranje posjetioca iz CSV fajla
     public static void kreirajPosjetioce() {
@@ -94,7 +92,7 @@ public class ListaDogadjaja implements Serializable {
 
     }
 
-    public static void napraviDogadjaje() {
+    public void napraviDogadjaje() {
         // Date datum = new Date();
         //datumi i vremena pocetnih dogadjaja
         Calendar kalendar = Calendar.getInstance();

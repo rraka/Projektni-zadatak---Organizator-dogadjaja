@@ -20,8 +20,8 @@ import sun.java2d.pipe.SpanShapeRenderer;
 public class PregledOsobeGUI extends javax.swing.JFrame {
 
    
-    private static Osoba osobaZaPregled;
-    private static RadSaOsobamaGUI radSaOsobamaGUI;
+    private Osoba osobaZaPregled;
+    private RadSaOsobamaGUI radSaOsobamaGUI;
     
     public PregledOsobeGUI(RadSaOsobamaGUI radSaOsobamaGUI, Osoba osobaZaPregled) {
         initComponents();
@@ -191,6 +191,7 @@ public class PregledOsobeGUI extends javax.swing.JFrame {
     private void napomeneComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_napomeneComboBoxActionPerformed
         String odabranaNapomena = (String) napomeneComboBox.getSelectedItem();
         int indeks = Integer.parseInt(odabranaNapomena);
+        System.out.println("INDEKS KOD PREGLEDA:::::::::::::::::::::;;" + indeks);
             dodatnaLabel4.setText("Datum:");
             Calendar kalendar = Calendar.getInstance();
             kalendar = ((Organizator) osobaZaPregled).getNapomenaOrganizator().get(indeks-1).getDatumKreiranja();
@@ -258,12 +259,14 @@ public class PregledOsobeGUI extends javax.swing.JFrame {
             }
             dodatnaLabel4.setText("Datum:");
             Calendar kalendar = Calendar.getInstance();
-            kalendar = ((Organizator) osobaZaPregled).getNapomenaOrganizator().get(0).getDatumKreiranja();
+            String odabranaNapomena = (String) napomeneComboBox.getSelectedItem();
+            int indeks = Integer.parseInt(odabranaNapomena);
+            kalendar = ((Organizator) osobaZaPregled).getNapomenaOrganizator().get(indeks-1).getDatumKreiranja();
             SimpleDateFormat formatDatuma = new SimpleDateFormat("dd.MM.yyyy");
             String formatiranDatum = formatDatuma.format(kalendar.getTime());
             dodatna43TekstLabela.setText(formatiranDatum);
             dodatnaLabel5.setText("Napomena");
-            napomenaTekst.setText(((Organizator) osobaZaPregled).getNapomenaOrganizator().get(0).getTekstualniSadrzaj());
+            napomenaTekst.setText(((Organizator) osobaZaPregled).getNapomenaOrganizator().get(indeks-1).getTekstualniSadrzaj());
             
         }
         else if (osobaZaPregled instanceof Predavac){

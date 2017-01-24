@@ -10,7 +10,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,10 +17,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import osoba.Organizator;
-import osoba.Osoba;
 import osoba.Posjetilac;
 import osoba.Predavac;
 import osoba.Ucesnik;
@@ -42,11 +38,14 @@ class OrganizatorDogadjajaServerNit extends Thread {
     private static ArrayList<Organizator> sviOrganizatori;
     private static ArrayList<Ucesnik> sviUcesnici;
     private static ArrayList<Predavac> sviPredavaci;
+    private int portMarketinskeKampanje = 10000;
     // private static ArrayList<Osoba> osobe;
+    private int IDNiti;
 
-    public OrganizatorDogadjajaServerNit(Socket soket) {
+    public OrganizatorDogadjajaServerNit(Socket soket, int IDNiti) {
         try {
             this.soket = soket;
+            this.IDNiti = IDNiti;
             ois = new ObjectInputStream(soket.getInputStream());
             oos = new ObjectOutputStream(soket.getOutputStream());
             //sviDogadjaji = OrganizatorDogadjajaServer.getSviDogadjaji();
@@ -101,8 +100,7 @@ class OrganizatorDogadjajaServerNit extends Thread {
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviPredavaci));  
                 } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.NOVI_DOGADJAJ))) {
                     sviDogadjaji = ListaDogadjaja.deSerijalizacija("dogadjaji");
-                    Dogadjaj noviDogadjaj = new Dogadjaj();
-                    noviDogadjaj = (Dogadjaj) poruka.getDodatak();
+                    Dogadjaj noviDogadjaj = (Dogadjaj) poruka.getDodatak();
                     sviDogadjaji.add(noviDogadjaj);
                     ListaDogadjaja.serijalizacija(sviDogadjaji);
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviDogadjaji));  //s
@@ -126,6 +124,7 @@ class OrganizatorDogadjajaServerNit extends Thread {
                     Organizator noviOrganizator = (Organizator) poruka.getDodatak();
                     sviOrganizatori.add(noviOrganizator);
                     ListaDogadjaja.serijalizacija(sviOrganizatori);
+                    System.out.println("PRIMLJENI ORGANIZATOR BROJ NAPOMENA:" + noviOrganizator.getNapomenaOrganizator().size());
                     oos.writeObject(new Poruka(Poruka.IDPoruke.OK, sviOrganizatori));  //s
                 }else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.NOVI_UCESNIK))) {
                     sviUcesnici = ListaDogadjaja.deSerijalizacija("ucesnici");
@@ -148,8 +147,19 @@ class OrganizatorDogadjajaServerNit extends Thread {
                     napraviFajlSaUcesnicima();
                     File listaUcesnika = new File(".\\src\\server\\fajlovi\\listaUcesnika.csv");
                     posaljiFajlKlijentu(listaUcesnika);
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.POKRENI_MARKENTISKU_KAMPANJU))) {
+                    Dogadjaj markentiskaKampanja = (Dogadjaj) poruka.getDodatak();
+                    MarketinskaKampanjaServer mks = new MarketinskaKampanjaServer(portMarketinskeKampanje, markentiskaKampanja);
+                    SimulacijaDolaskaPosjetilaca sdp = new SimulacijaDolaskaPosjetilaca(portMarketinskeKampanje);
+                    portMarketinskeKampanje++;
+                } else if ((poruka.getIdPoruke().equals(Poruka.IDPoruke.ZATVARANJE_KONEKCIJE))) {
+                    break;
                 }
             }
+            soket.close();
+            oos.close();
+            ois.close();
+            OrganizatorDogadjajaServer.izbaciNitIzObavjestavanja(IDNiti);
         } catch (Exception ex) {
             ex.printStackTrace();
 

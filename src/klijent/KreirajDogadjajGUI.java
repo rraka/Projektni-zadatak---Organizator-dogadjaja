@@ -11,23 +11,16 @@ import dogadjaj.Koncert;
 import dogadjaj.OstaliDogadjaji;
 import dogadjaj.Predavanje;
 import dogadjaj.Promocija;
-import java.io.IOException;
+import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import osoba.Organizator;
 import osoba.Predavac;
@@ -41,28 +34,26 @@ import poruka.Poruka;
 public class KreirajDogadjajGUI extends javax.swing.JFrame {
 
     private PocetnaGUI pocetnaGUI;
-    private static final int PORT = 9000;
-    private static Socket soket;
-    private static ObjectOutputStream oos;
-    private static ObjectInputStream ois;
-    private static ArrayList<Organizator> sviOrganizatori;
-    private static ArrayList<Predavac> sviPredavaci;
-    private static ArrayList<Ucesnik> sviUcesnici;
-    private static ArrayList<Dogadjaj> sviDogadjaji;
-    private static DefaultTableModel modelTabelaUcesnici;
-    private static DefaultTableModel modelTabelaDogadjaji;
-    private static ArrayList<Ucesnik> sviUcesniciNaJednomDogadjaju;
-    private static ArrayList<Dogadjaj> sviDogadjajiNaDogadjaju;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
+    private ArrayList<Organizator> sviOrganizatori;
+    private ArrayList<Predavac> sviPredavaci;
+    private ArrayList<Ucesnik> sviUcesnici;
+    private ArrayList<Dogadjaj> sviDogadjaji;
+    private DefaultTableModel modelTabelaUcesnici;
+    private DefaultTableModel modelTabelaDogadjaji;
+    private ArrayList<Ucesnik> sviUcesniciNaJednomDogadjaju;
+    private ArrayList<Dogadjaj> sviDogadjajiNaDogadjaju;
+    private ArrayList<File> sviFajloviZaDogadjaj;
     
     
     
     public KreirajDogadjajGUI(PocetnaGUI pocetnaGUI) {
         try {
             initComponents();
-            InetAddress adresa = InetAddress.getByName("127.0.0.1");
-            soket = new Socket(adresa, PORT);
-            oos = PocetnaGUI.getOos();
-            ois = PocetnaGUI.getOis();
+            
+            oos = pocetnaGUI.getOos();
+            ois = pocetnaGUI.getOis();
             
             this.pocetnaGUI = pocetnaGUI; 
             
@@ -94,6 +85,9 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
             modelTabelaUcesnici = (DefaultTableModel) ucesniciNaDogadjajuTable.getModel();  
             modelTabelaDogadjaji = (DefaultTableModel) povezaniDogadjajiTable.getModel();
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            izborFajlaList.setModel(new DefaultListModel<>());
+            sviFajloviZaDogadjaj = new ArrayList<>();
            // this.pocetnaGUI = pocetnaGUI;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -148,6 +142,10 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         povezaniDogadjajiTable = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        izborFajlaList = new javax.swing.JList<>();
+        jLabel5 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -164,6 +162,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(750, 500));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -212,6 +211,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                 "Ime", "Prezime", "Organizacija"
             }
         ));
+        ucesniciNaDogadjajuTable.setEnabled(false);
         jScrollPane1.setViewportView(ucesniciNaDogadjajuTable);
         if (ucesniciNaDogadjajuTable.getColumnModel().getColumnCount() > 0) {
             ucesniciNaDogadjajuTable.getColumnModel().getColumn(0).setPreferredWidth(60);
@@ -253,6 +253,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                 "Naziv", "Vrsta"
             }
         ));
+        povezaniDogadjajiTable.setEnabled(false);
         jScrollPane3.setViewportView(povezaniDogadjajiTable);
         if (povezaniDogadjajiTable.getColumnModel().getColumnCount() > 0) {
             povezaniDogadjajiTable.getColumnModel().getColumn(0).setPreferredWidth(120);
@@ -260,6 +261,22 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
         }
 
         jLabel4.setText("Dogadjaji:");
+
+        izborFajlaList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane4.setViewportView(izborFajlaList);
+
+        jLabel5.setText("Lista fajlova:");
+
+        jButton1.setText("Dodaj fajl");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout gornjiPanelLayout = new javax.swing.GroupLayout(gornjiPanel);
         gornjiPanel.setLayout(gornjiPanelLayout);
@@ -279,8 +296,9 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                             .addComponent(opisDogadjajaLabel)
                             .addComponent(organizatorDogadjajaLabel)
                             .addComponent(dodatnaLabel2)
+                            .addComponent(dogadjajLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(predavacDogadjajLabel)
-                            .addComponent(dogadjajLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(gornjiPanelLayout.createSequentialGroup()
@@ -308,16 +326,17 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                                     .addComponent(organizatorDogadjajaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(dodatniTextField2)
                                     .addComponent(predavacDogadjajComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(nazivDogadjajaTextField))
+                                    .addComponent(nazivDogadjajaTextField)
+                                    .addComponent(jScrollPane4))
                                 .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(gornjiPanelLayout.createSequentialGroup()
                                         .addGap(33, 33, 33)
                                         .addComponent(kreiranjeDogadjajaiLabel)
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(gornjiPanelLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                                         .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addGroup(gornjiPanelLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                                                 .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jLabel22)
                                                     .addComponent(jLabel4))
@@ -333,7 +352,11 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                                                         .addGap(18, 18, 18)
                                                         .addComponent(dodajPovezaniDogadjajUTabeluButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                                            .addComponent(zavrsiKreiranjeDogadjajaDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(gornjiPanelLayout.createSequentialGroup()
+                                                .addGap(12, 12, 12)
+                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(zavrsiKreiranjeDogadjajaDugme, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGap(48, 48, 48))))))))
         );
         gornjiPanelLayout.setVerticalGroup(
@@ -387,16 +410,27 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(gornjiPanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(zavrsiKreiranjeDogadjajaDugme)
+                            .addComponent(jButton1)))
+                    .addGroup(gornjiPanelLayout.createSequentialGroup()
                         .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dodatnaLabel2)
                             .addComponent(dodatniTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(predavacDogadjajLabel)
-                            .addComponent(predavacDogadjajComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(zavrsiKreiranjeDogadjajaDugme)
+                            .addComponent(predavacDogadjajComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(gornjiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(gornjiPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(gornjiPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(19, 19, 19))
         );
 
@@ -570,7 +604,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
             oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_DOGADJAJI, null));
             Poruka poruka = (Poruka) ois.readObject();
             ArrayList<Dogadjaj> noviDogadjaji = (ArrayList<Dogadjaj>) poruka.getDodatak();
-            PocetnaGUI.popuniTabeluDogadjaja(noviDogadjaji, ucesniciNaDogadjajuTable);
+//            PocetnaGUI.popuniTabeluDogadjaja(noviDogadjaji, ucesniciNaDogadjajuTable);
             pocetnaGUI.setVisible(true);
             dispose();
             
@@ -601,14 +635,23 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
        }
         JOptionPane.showMessageDialog(null, "Ucesnik: - " + odabraniDogadjaj.getNazivDogadjaja() + " uspjesno dodat!" );
     }//GEN-LAST:event_dodajPovezaniDogadjajUTabeluButtonActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.showOpenDialog(this);
+        File izabraniFajl = fileChooser.getSelectedFile();
+        DefaultListModel modelListe  = (DefaultListModel) izborFajlaList.getModel();
+        modelListe.addElement(izabraniFajl.getName());
+        sviFajloviZaDogadjaj.add(izabraniFajl);
+    }//GEN-LAST:event_jButton1MouseClicked
    
     
     
     
-    public static ArrayList<Organizator> getSviOrganizatori(){
+    public ArrayList<Organizator> getSviOrganizatori(){
         ArrayList<Organizator> sviOrganizatori = new ArrayList<>();
         try {
-            oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_ORGANIZATORI, null));
+            oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_ORGANIZATORI));
             Poruka poruka = (Poruka) ois.readObject();
             sviOrganizatori = (ArrayList<Organizator>) poruka.getDodatak();
             System.out.println("SVI ORGANIZATORI PRIMLJENI SA SERVERA: " + sviOrganizatori);
@@ -621,10 +664,10 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
     }
     
     
-    public static ArrayList<Dogadjaj> getSviDogadjaji(){
+    public ArrayList<Dogadjaj> getSviDogadjaji(){
         ArrayList<Dogadjaj> dogadjaji = new ArrayList<>();
         try {
-            oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_DOGADJAJI, null));
+            oos.writeObject(new Poruka(Poruka.IDPoruke.SVI_DOGADJAJI));
             Poruka poruka = (Poruka) ois.readObject();
             dogadjaji = (ArrayList<Dogadjaj>) poruka.getDodatak();
         } catch (Exception ex) {
@@ -634,10 +677,10 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
     }
     
     
-    public static ArrayList<Ucesnik> getSviUcesnici(){
+    public ArrayList<Ucesnik> getSviUcesnici(){
         ArrayList<Ucesnik> sviUcesnici = new ArrayList<>();
         try {
-            oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_UCESNICI, null));
+            oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_UCESNICI));
             Poruka poruka = (Poruka) ois.readObject();
             sviUcesnici = (ArrayList<Ucesnik>) poruka.getDodatak();
             System.out.println("SVI UCESNICI PRIMLJENI SA SERVERA: " + sviUcesnici);
@@ -649,10 +692,10 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
     }
     
     
-    public static ArrayList<Predavac> getSviPredavaci(){
+    public ArrayList<Predavac> getSviPredavaci(){
         ArrayList<Predavac> sviPredavaci = new ArrayList<>();
         try {
-            oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_PREDAVACI, null));
+            oos.writeObject(new poruka.Poruka(Poruka.IDPoruke.SVI_PREDAVACI));
             Poruka poruka = (Poruka) ois.readObject();
             sviPredavaci = (ArrayList<Predavac>) poruka.getDodatak();
             System.out.println("SVI Predavaci PRIMLJENI SA SERVERA: " + sviPredavaci);
@@ -664,7 +707,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
     }
     
     
-    private static void popuniOrganizatoriComboBox(JComboBox organizatorDogadjajaComboBox){
+    private void popuniOrganizatoriComboBox(JComboBox organizatorDogadjajaComboBox){
         try {
             for(int i=0; i<sviOrganizatori.size(); i++){
               organizatorDogadjajaComboBox.addItem(sviOrganizatori.get(i));   
@@ -676,10 +719,10 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
         }
     }
     
-    private static void popuniUcesniciComboBox(JComboBox ucesniciDogadjajaComboBox){
+    private void popuniUcesniciComboBox(JComboBox ucesniciDogadjajaComboBox){
         try {
             for(int i=0; i<sviUcesnici.size(); i++){
-            ucesniciDogadjajaComboBox.addItem(sviUcesnici.get(i));
+                ucesniciDogadjajaComboBox.addItem(sviUcesnici.get(i));
             }
         } 
         catch (Exception ex) {
@@ -687,7 +730,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
         }
     }
     
-    private static void popuniPredavaciComboBox(JComboBox predavaciDogadjajaComboBox){
+    private void popuniPredavaciComboBox(JComboBox predavaciDogadjajaComboBox){
         try {
             for(int i=0; i<sviPredavaci.size(); i++){
               predavaciDogadjajaComboBox.addItem(sviPredavaci.get(i));   
@@ -698,7 +741,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
         }
     }
     
-    private static void popuniDogadjajiComboBox(JComboBox dogadjajiPovezaniComboBox) {
+    private void popuniDogadjajiComboBox(JComboBox dogadjajiPovezaniComboBox) {
         try {
             for(int i=0; i<sviDogadjaji.size(); i++){
             dogadjajiPovezaniComboBox.addItem(sviDogadjaji.get(i));
@@ -710,7 +753,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
     }
     
     //dodavanje ucesnika u tabelu i listu odabranih ucesnika na jednom dogadjaju
-     private static void popuniTabeluUcesniciNaDogadjaju(Ucesnik ucesnikNaDogadjaju, JTable tabelaucesniciNaDogadjajuTable) {
+     private void popuniTabeluUcesniciNaDogadjaju(Ucesnik ucesnikNaDogadjaju, JTable tabelaucesniciNaDogadjajuTable) {
             System.out.println("odabrani ucesnik ZA TABELU: " + ucesnikNaDogadjaju);
             sviUcesniciNaJednomDogadjaju.add(ucesnikNaDogadjaju);
             System.out.println("svi ucesnici na jednom dogadjaju:" + sviUcesniciNaJednomDogadjaju);
@@ -724,7 +767,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
      
      
      
-     private static void popuniTabeluDogadjajiNaDogadjaju(Dogadjaj dogadjajNaDogadjaju, JTable povezaniDogadjajiTable) {
+     private void popuniTabeluDogadjajiNaDogadjaju(Dogadjaj dogadjajNaDogadjaju, JTable povezaniDogadjajiTable) {
             System.out.println("odabrani ucesnik ZA TABELU: " + dogadjajNaDogadjaju);
             sviDogadjajiNaDogadjaju.add(dogadjajNaDogadjaju);
             System.out.println("svi ucesnici na jednom dogadjaju:" + sviUcesniciNaJednomDogadjaju);
@@ -734,7 +777,7 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
             modelTabelaDogadjaji.addRow(new Object[]{nazivDogadjaja, vrstaDogadjaja});//P R O B L E M
     }
      
-     private static Ucesnik pronadjiUcesnika(String imeOdabraniUcesnik, String prezimeOdabraniUcesnik){
+     private Ucesnik pronadjiUcesnika(String imeOdabraniUcesnik, String prezimeOdabraniUcesnik){
          Ucesnik pronadjeniUcesnik = new Ucesnik();
          for(int i = 0; i<sviUcesnici.size(); i++){
              if((sviUcesnici.get(i).getImeOsobe().equals(imeOdabraniUcesnik) && sviUcesnici.get(i).getPrezimeOsobe().equals(prezimeOdabraniUcesnik))){
@@ -758,14 +801,18 @@ public class KreirajDogadjajGUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> dogadjajiComboBox;
     private javax.swing.JComboBox<String> dogadjajiPovezaniComboBox;
     private javax.swing.JPanel gornjiPanel;
+    private javax.swing.JList<String> izborFajlaList;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel kreiranjeDogadjajaiLabel;
     private javax.swing.JLabel nazivDogadjajaLabel;
